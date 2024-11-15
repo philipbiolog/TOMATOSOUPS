@@ -21,10 +21,10 @@ theta = deg2rad(cameraobject.attitude(2));
 psi = deg2rad(cameraobject.attitude(3));
 
 eul = [phi theta  psi];
-rotmZYX = RotationMatrix321(eul);
+R = RotationMatrix321(eul);
 
 trajectory_camera = trajectory - [x y z]; % Trajectory relative to Camera position
-trajectory_camera = rotmZYX * trajectory_camera'; % Apply Camera Rotation
+trajectory_camera = R * trajectory_camera'; % Apply Camera Rotation
 trajectory_camera = trajectory_camera';
 [rows, ~] = size(trajectory_camera);
 
@@ -33,7 +33,7 @@ position_c = zeros(rows,3);
 % Uses Johns math to find the x and y camera fame cordinates
 for i = 1:rows
     t = trajectory_camera(i,2);
-    position_c(i,1) = atan(trajectory_camera(i,i)/t)*pix_x/FOV_x;
+    position_c(i,1) = atan(trajectory_camera(i,1)/t)*pix_x/FOV_x;
     position_c(i,2) = atan(trajectory_camera(i,3)/t)*pix_y/FOV_y;
     
     % Sees if the camera could see the pixle
@@ -44,6 +44,10 @@ for i = 1:rows
     else
         position_c(i,3) = true;
     end
+end
+center = cameraobject.resolution /2;
+position_c(i, 1) = position_c(i, 1) + center(1);
+position_c(i, 2) = center(2) - position_c(i, 2);
 end
 
 
