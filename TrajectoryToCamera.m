@@ -22,8 +22,13 @@ psi = deg2rad(cameraobject.attitude(3));
 
 eul = [phi theta  psi];
 R = RotationMatrix321(eul);
+offset = ones(size(trajectory));
+offset(:, 1) = offset(:, 1).*x;
+offset(:, 2) = offset(:, 2).*y;
+offset(:, 3) = offset(:, 3).*z;
 
-trajectory_camera = trajectory - [x y z]; % Trajectory relative to Camera position
+
+trajectory_camera = trajectory - offset; % Trajectory relative to Camera position
 trajectory_camera = R * trajectory_camera'; % Apply Camera Rotation
 trajectory_camera = trajectory_camera';
 [rows, ~] = size(trajectory_camera);
@@ -46,8 +51,8 @@ for i = 1:rows
     end
 end
 center = cameraobject.resolution /2;
-position_c(i, 1) = position_c(i, 1) + center(1);
-position_c(i, 2) = center(2) - position_c(i, 2);
+position_c(:, 1) = position_c(:, 1) + ones(size(position_c(:, 1)))*center(1);
+position_c(:, 2) = ones(size(position_c(:, 2)))*center(2) - position_c(:, 2);
 end
 
 
