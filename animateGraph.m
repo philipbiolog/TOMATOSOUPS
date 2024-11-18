@@ -35,6 +35,10 @@ Pixel2_Visible = Pixel2(:, 3);
 Pixel2 = Pixel2(:, 1:2);
 
 % Plotting 
+video = VideoWriter('Initial_positionvtime.mp4','MPEG-4');
+open(video);
+
+
 figure(1)
 t = linspace(0,200);
 error = zeros(1, 20);
@@ -58,4 +62,10 @@ for i=1:20
     drawnow
     pause(.2)
     error(i) = norm(Pos(i, :)-position);
+
+    frame = getframe(gcf);
+    writeVideo(video,frame);
+
 end
+
+close(video)
