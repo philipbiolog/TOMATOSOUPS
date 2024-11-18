@@ -46,6 +46,8 @@ for i=1:20
     plot3(Pos(i, 1), Pos(i, 2), Pos(i, 3), 'ro', 'MarkerSize', 8)
     drawnow
     pause(.2)
+    frame1 = getframe(gcf);
+    writeVideo(video,frame1);
     line1 = Frame2Line(Pixel1(i, :), cameraInfo1, t);
     line2 = Frame2Line(Pixel2(i, :), cameraInfo2, t);
     position = SecondOrder3DLine(Pixel1(i, :),cameraInfo1,Pixel2(i, :),cameraInfo2);
@@ -63,8 +65,8 @@ for i=1:20
     pause(.2)
     error(i) = norm(Pos(i, :)-position);
 
-    frame = getframe(gcf);
-    writeVideo(video,frame);
+    frame2 = getframe(gcf);
+    writeVideo(video,frame2);
 
 end
 
