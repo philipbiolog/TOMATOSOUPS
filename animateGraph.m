@@ -1,29 +1,26 @@
 clear; clc; close all;
 
 %% Camera Initialization
-x_start = 20;
-x_end = 60;
-y_start = 0;
-y_end = 80;
-z_offset = 1;
-Pos = [linspace(x_start, x_end, 20)', linspace(y_start, y_end, 20)', (sin(linspace(0, 10, 20)) + z_offset*ones(size(1, 20)))'];
+n = 20; % Fidelity
+z_offset = 15;
+Pos = [10*sin(linspace(0, 10, n))', linspace(0, 70, n)', linspace(z_offset, 0, n)'];
 
 
-cameraInfo1.resolution = [3840;2160]; % pixels
-cameraInfo1.FOV_w = 60;
-cameraInfo1.FOV_l = 40; % deg
+cameraInfo1.resolution = [7680;4320]; % pixels
+cameraInfo1.FOV_w = 157;
+cameraInfo1.FOV_l = 80; % deg
 cameraInfo1.attitude = [15;0;-45]; % deg
-cameraInfo1.X = 0;
-cameraInfo1.Y = -5;
+cameraInfo1.X = -50;
+cameraInfo1.Y = 5;
 cameraInfo1.Z = 0; % meters
 
 
-cameraInfo2.resolution = [3840;2160];
-cameraInfo2.FOV_w = 60;
-cameraInfo2.FOV_l = 40;
+cameraInfo2.resolution = [7680;4320];
+cameraInfo2.FOV_w = 157;
+cameraInfo2.FOV_l = 80;
 cameraInfo2.attitude = [15;0;45];
-cameraInfo2.X = 80;
-cameraInfo2.Y = -5;
+cameraInfo2.X = 50;
+cameraInfo2.Y = 5;
 cameraInfo2.Z = 0;
 
 %% Base Code testing
@@ -40,34 +37,46 @@ open(video);
 
 
 figure(1)
+plot3(cameraInfo1.X, cameraInfo1.Y, cameraInfo1.Z, 'bo', 'MarkerSize',4);
+hold on
+plot3(cameraInfo2.X, cameraInfo2.Y, cameraInfo2.Z, 'ko', 'MarkerSize',4);
 t = linspace(0,200);
 error = zeros(1, 20);
-for i=1:20
+az = 120;
+el = 10;
+for i=1:n
     plot3(Pos(i, 1), Pos(i, 2), Pos(i, 3), 'ro', 'MarkerSize', 8)
+    view(az, el)
     drawnow
     pause(.2)
     frame1 = getframe(gcf);
-    writeVideo(video,frame1);
+    for s=1:10
+        writeVideo(video,frame1);
+    end
     line1 = Frame2Line(Pixel1(i, :), cameraInfo1, t);
     line2 = Frame2Line(Pixel2(i, :), cameraInfo2, t);
     position = SecondOrder3DLine(Pixel1(i, :),cameraInfo1,Pixel2(i, :),cameraInfo2);
-    plot3(line1(1, :), line1(2, :), line1(3, :), 'r');
+    plot3(line1(1, :), line1(2, :), line1(3, :), 'b');
     hold on
-    plot3(line2(1, :), line2(2, :), line2(3, :), 'b');
+    plot3(line2(1, :), line2(2, :), line2(3, :), 'k');
     plot3(position(1),position(2),position(3), 'go', 'MarkerFaceColor', 'g', 'MarkerSize', 8)
     xlabel("x axis")
     ylabel("y axis")
     zlabel("z axis")
-    xlim([0 80])
+    xlim([-50 50])
     ylim([0 100])
     zlim([0 20])
+    view(az, el)
     drawnow
     pause(.2)
-    error(i) = norm(Pos(i, :)-position);
+    err = Pos(i, :)-position';
+    error(i) = norm(err);
 
     frame2 = getframe(gcf);
-    writeVideo(video,frame2);
-
+    for s=1:10
+        writeVideo(video,frame2);
+    end
+    
 end
 
 close(video)
