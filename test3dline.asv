@@ -4,7 +4,7 @@ clear; clc; close all;
 
 % Test Config 1
 %
-Pos = [0,40,15];
+Pos = [0,40,10];
 cameraInfo1.resolution = [7680;4320]; % pixels
 cameraInfo1.FOV_w = 157;
 cameraInfo1.FOV_l = 80; % deg
@@ -23,12 +23,12 @@ cameraInfo2.Z = 0;
 %}
 
 % Test Config 2
-%{
-Pos = [0,50,15];
+%
+Pos = [0,40,10];
 cameraInfo1.resolution = [7680;4320]; % pixels
 cameraInfo1.FOV_w = 157;
 cameraInfo1.FOV_l = 80; % deg
-cameraInfo1.attitude = [15;0;-135]; % deg
+cameraInfo1.attitude = [15;0;-45]; % deg
 cameraInfo1.X = -50;
 cameraInfo1.Y = 120;
 cameraInfo1.Z = 0; % meters
@@ -36,7 +36,7 @@ cameraInfo1.Z = 0; % meters
 cameraInfo2.resolution = [7680;4320];
 cameraInfo2.FOV_w = 157;
 cameraInfo2.FOV_l = 80;
-cameraInfo2.attitude = [15;0;135];
+cameraInfo2.attitude = [15;0;45];
 cameraInfo2.X = 50;
 cameraInfo2.Y = 120;
 cameraInfo2.Z = 0;
