@@ -47,7 +47,8 @@ for i=1:20
     drawnow
     pause(.2)
     frame1 = getframe(gcf);
-    writeVideo(video,frame1);
+    wri
+
     line1 = Frame2Line(Pixel1(i, :), cameraInfo1, t);
     line2 = Frame2Line(Pixel2(i, :), cameraInfo2, t);
     position = SecondOrder3DLine(Pixel1(i, :),cameraInfo1,Pixel2(i, :),cameraInfo2);
