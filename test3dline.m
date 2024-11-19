@@ -1,46 +1,24 @@
 clear; clc; close all;
 
 %% Camera Initialization
+Pos = [10, 50, 10];
 
-% Test Config 1
-%
-Pos = [0,40,15];
-cameraInfo1.resolution = [7680;4320]; % pixels
-cameraInfo1.FOV_w = 157;
-cameraInfo1.FOV_l = 80; % deg
-cameraInfo1.attitude = [15;0;-45]; % deg
-cameraInfo1.X = -50;
-cameraInfo1.Y = 5;
-cameraInfo1.Z = 0; % meters
+cameraInfo1.resolution = [3840;2160]; % pixels
+cameraInfo1.FOV_w = 60;
+cameraInfo1.FOV_l = 40; % deg
+cameraInfo1.attitude = [15;0;-20]; % deg
+cameraInfo1.X = 10;
+cameraInfo1.Y = 10;
+cameraInfo1.Z = 5; % meters
 
-cameraInfo2.resolution = [7680;4320];
-cameraInfo2.FOV_w = 157;
-cameraInfo2.FOV_l = 80;
-cameraInfo2.attitude = [15;0;45];
-cameraInfo2.X = 50;
-cameraInfo2.Y = 5;
-cameraInfo2.Z = 0;
-%}
 
-% Test Config 2
-%{
-Pos = [0,50,15];
-cameraInfo1.resolution = [7680;4320]; % pixels
-cameraInfo1.FOV_w = 157;
-cameraInfo1.FOV_l = 80; % deg
-cameraInfo1.attitude = [15;0;-135]; % deg
-cameraInfo1.X = -50;
-cameraInfo1.Y = 120;
-cameraInfo1.Z = 0; % meters
-
-cameraInfo2.resolution = [7680;4320];
-cameraInfo2.FOV_w = 157;
-cameraInfo2.FOV_l = 80;
-cameraInfo2.attitude = [15;0;135];
-cameraInfo2.X = 50;
-cameraInfo2.Y = 120;
-cameraInfo2.Z = 0;
-%}
+cameraInfo2.resolution = [3840;2160];
+cameraInfo2.FOV_w = 60;
+cameraInfo2.FOV_l = 40;
+cameraInfo2.attitude = [15;0;20];
+cameraInfo2.X = 60;
+cameraInfo2.Y = 10;
+cameraInfo2.Z = 5;
 
 %% Base Code testing
 Pixel1 = TrajectoryToCamera(Pos, cameraInfo1);
@@ -65,10 +43,9 @@ plot3(position(1),position(2),position(3), 'go', 'MarkerFaceColor', 'g', 'Marker
 xlabel("x axis")
 ylabel("y axis")
 zlabel("z axis")
-xlim([-50 50])
+xlim([0 80])
 ylim([0 100])
 zlim([0 20])
-view(120, 10)
 hold off
 
 %% Error Analysis
@@ -76,7 +53,7 @@ hold off
 n = 100; % Fidelity
 camPos_error = linspace(-.5, .5, n);
 frame_error = [linspace(-2, 2, n); linspace(-2, 2, n)];
-camAtt_error = [linspace(-5, 5, n); linspace(-5, 5, n); linspace(-10, 10, n)];
+camAtt_error = [linspace(-5, 5, n); linspace(-5, 5, n); linspace(-5, 5, n)];
 
 %%  Position Error Analysis
 figNum = 2;
