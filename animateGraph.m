@@ -43,11 +43,11 @@ figure(1)
 t = linspace(0,200);
 error = zeros(1, 20);
 for i=1:20
-    plot3(Pos(i, 1), Pos(i, 2), Pos(i, 3), 'ko','MarkerFaceColor','k', 'MarkerSize', 8)
+    plot3(Pos(i, 1), Pos(i, 2), Pos(i, 3), 'ro', 'MarkerSize', 8)
+    drawnow
+    pause(.2)
     frame1 = getframe(gcf);
-    for j=1:10
-        writeVideo(video,frame1);
-    end
+    writeVideo(video,frame1);
     line1 = Frame2Line(Pixel1(i, :), cameraInfo1, t);
     line2 = Frame2Line(Pixel2(i, :), cameraInfo2, t);
     position = SecondOrder3DLine(Pixel1(i, :),cameraInfo1,Pixel2(i, :),cameraInfo2);
@@ -55,19 +55,18 @@ for i=1:20
     hold on
     plot3(line2(1, :), line2(2, :), line2(3, :), 'b');
     plot3(position(1),position(2),position(3), 'go', 'MarkerFaceColor', 'g', 'MarkerSize', 8)
-    title("Predetermined Flight Path visualized with Bearings Lines")
     xlabel("x axis")
     ylabel("y axis")
     zlabel("z axis")
     xlim([0 80])
     ylim([0 100])
     zlim([0 20])
+    drawnow
+    pause(.2)
     error(i) = norm(Pos(i, :)-position);
 
     frame2 = getframe(gcf);
-    for k=1:10
-        writeVideo(video,frame2);
-    end
+    writeVideo(video,frame2);
 
 end
 
