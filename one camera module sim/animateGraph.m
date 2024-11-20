@@ -34,7 +34,7 @@ Pixel2_Visible = Pixel2(:, 3);
 Pixel2 = Pixel2(:, 1:2);
 
 % Plotting 
-video = VideoWriter('Initial_positionvtime.mp4','MPEG-4');
+video = VideoWriter('Binocular_vision_initial.mp4','MPEG-4');
 open(video);
 
 
