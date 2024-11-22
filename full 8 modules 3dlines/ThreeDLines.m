@@ -82,7 +82,7 @@ pos = sum / length(cam_see);
         
         % define the system of equations for all cameras that can see the
         % glider
-        for j = 1:length(cam_see)
+        for j = 1:(length(cam_see)-1)
             for k = j+1:length(cam_see)  % compare each unique pair (avoid repetition)
                 
                 % extract the variables t1, t2 from the input vector t
