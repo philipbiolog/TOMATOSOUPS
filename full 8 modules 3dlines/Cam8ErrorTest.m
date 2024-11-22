@@ -109,13 +109,19 @@ for i=1:fidelity
 end
 figure
 histogram(Error(:, 1), 'NumBins',50, 'FaceColor', 'b')
+xlabel("Injected Error")
+ylabel("Number of Simulations")
+
 figure
 ErrorX = rmoutliers(ErrorPos(:, 1));
 histogram(ErrorPos(:, 1), 'NumBins', 50, 'FaceColor', 'r')
+xlabel("Estimated X Error")
+ylabel("Number of Simulations")
+
 figure
 histogram(ErrorX, 'NumBins', 50, 'FaceColor', 'b')
-% histogram(ErrorPos(:, 3), 'NumBins', 50, 'FaceColor', 'g')
-% hold off
+xlabel("Estimated X Error with no Outliers")
+ylabel("Number of Simulations")
 
 
 
