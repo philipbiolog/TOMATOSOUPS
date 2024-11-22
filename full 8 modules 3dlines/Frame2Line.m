@@ -10,4 +10,8 @@ function pos = Frame2Line(framePos, Camera, t)
     R = RotationMatrix321( deg2rad(Camera.attitude()) );
     d = R \ [tan(p), 1, tan(q)]'; % Vertical vector of direction (no t value)
     pos = t.*d + x_bar;
+
+    if framePos(3) == 0
+        pos = NaN(length(t));
+    end
 end
