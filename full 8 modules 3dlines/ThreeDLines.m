@@ -59,7 +59,11 @@ initial_guess = 10 * ones(length(cam_see),1);
 %options = optimoptions('lsqnonlin','OptimalityTolerance',1e-5,'Display','off');
 
 %calling fsolve to solve for t
-[t, ~] = lsqnonlin(f, initial_guess);
+options = optimoptions("lsqnonlin",'FunctionTolerance',1e-5,'Display','off');
+lb = -200 * ones(length(cam_see),1);
+ub = 400 * ones(length(cam_see),1);
+
+[t, ~] = lsqnonlin(f, initial_guess,lb,ub,options);
 
 %finding position by finding the average of all the calculated position
 %values from the value of t fsolve gave
