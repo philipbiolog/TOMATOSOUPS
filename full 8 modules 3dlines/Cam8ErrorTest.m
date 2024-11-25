@@ -1,7 +1,6 @@
 clc; clear; close all;
 %% Camera Initialization
-n = 20; % Fidelity
-z_offset = 15;
+
 Pos = [0, 50, 20];
 
 %camera 1
@@ -87,6 +86,7 @@ Pixel5 = TrajectoryToCamera(Pos, cameraInfo5);
 Pixel6 = TrajectoryToCamera(Pos, cameraInfo6);
 Pixel7 = TrajectoryToCamera(Pos, cameraInfo7);
 Pixel8 = TrajectoryToCamera(Pos, cameraInfo8);
+
 % Pixel1 = Pixel1(1:2);
 % Pixel2 = Pixel2(1:2);
 % Pixel3 = Pixel3(1:2);
@@ -96,33 +96,82 @@ Pixel8 = TrajectoryToCamera(Pos, cameraInfo8);
 % Pixel7 = Pixel7(1:2);
 % Pixel8 = Pixel8(1:2);
 
-fidelity = 100;
+fidelity = 1000;
 ErrorPos = zeros(fidelity, 3);
 Error = zeros(8, 3);
+
+cam1_att = camInfo.cam1.attitude;
+cam2_att = camInfo.cam2.attitude;
+cam3_att = camInfo.cam3.attitude;
+cam4_att = camInfo.cam4.attitude;
+cam5_att = camInfo.cam5.attitude;
+cam6_att = camInfo.cam6.attitude;
+cam7_att = camInfo.cam7.attitude;
+cam8_att = camInfo.cam8.attitude;
+
+
+xy_err = .4;
+z_err = .6;
+
+
 for i=1:fidelity
-    for j=1:8
-        Error(i, 1:2) = 10*randn(1, 2);
-    end
-    pixel_pos = [Pixel1 + Error(1, :);Pixel2 + Error(2, :);Pixel3 + Error(3, :);Pixel4 + Error(4, :);Pixel5 + Error(5, :);Pixel6 + Error(6, :);Pixel7 + Error(7, :);Pixel8 + Error(8, :)];
+%     for j=1:8
+%         Error(i, 1:2) = 10*randn(1, 2);
+%     end
+    camInfo.cam1.attitude(1:2) = cam1_att(1:2) + xy_err*randn(2, 1);
+    camInfo.cam2.attitude(1:2) = cam2_att(1:2) + xy_err*randn(2, 1);
+    camInfo.cam3.attitude(1:2) = cam3_att(1:2) + xy_err*randn(2, 1);
+    camInfo.cam4.attitude(1:2) = cam4_att(1:2) + xy_err*randn(2, 1);
+    camInfo.cam5.attitude(1:2) = cam5_att(1:2) + xy_err*randn(2, 1);
+    camInfo.cam6.attitude(1:2) = cam6_att(1:2) + xy_err*randn(2, 1);
+    camInfo.cam7.attitude(1:2) = cam7_att(1:2) + xy_err*randn(2, 1);
+    camInfo.cam8.attitude(1:2) = cam8_att(1:2) + xy_err*randn(2, 1);
+
+    camInfo.cam1.attitude(3) = cam1_att(3) + z_err*randn(1, 1);
+    camInfo.cam2.attitude(3) = cam2_att(3) + z_err*randn(1, 1);
+    camInfo.cam3.attitude(3) = cam3_att(3) + z_err*randn(1, 1);
+    camInfo.cam4.attitude(3) = cam4_att(3) + z_err*randn(1, 1);
+    camInfo.cam5.attitude(3) = cam5_att(3) + z_err*randn(1, 1);
+    camInfo.cam6.attitude(3) = cam6_att(3) + z_err*randn(1, 1);
+    camInfo.cam7.attitude(3) = cam7_att(3) + z_err*randn(1, 1);
+    camInfo.cam8.attitude(3) = cam8_att(3) + z_err*randn(1, 1);
+
+    pixel_pos = [Pixel1;Pixel2;Pixel3;Pixel4; Pixel5;Pixel6;Pixel7;Pixel8];
     position = ThreeDLines(pixel_pos,camInfo,8);
     ErrorPos(i, :) = Pos - position';
 end
-figure
-histogram(Error(:, 1), 'NumBins',50, 'FaceColor', 'b')
-xlabel("Injected Error")
-ylabel("Number of Simulations")
+% figure
+% histogram(Error(:, 1), 'NumBins',50, 'FaceColor', 'b')
+% xlabel("Injected Error")
+% ylabel("Number of Simulations")
 
-figure
+figure()
 ErrorX = rmoutliers(ErrorPos(:, 1));
-histogram(ErrorPos(:, 1), 'NumBins', 50, 'FaceColor', 'r')
-xlabel("Estimated X Error")
+histogram(ErrorX, 'NumBins', 50, 'FaceColor', 'r')
+xlabel("Error in Position Estimate")
 ylabel("Number of Simulations")
-
-figure
-histogram(ErrorX, 'NumBins', 50, 'FaceColor', 'b')
-xlabel("Estimated X Error with no Outliers")
+legend("X Estimation Error")
+figure()
+ErrorY = rmoutliers(ErrorPos(:, 2));
+histogram(ErrorY, 'NumBins', 50, 'FaceColor', 'b')
+xlabel("Error in Position Estimate")
 ylabel("Number of Simulations")
+legend("Y Estimation Error")
+figure()
+ErrorZ = rmoutliers(ErrorPos(:, 3));
+histogram(ErrorZ, 'NumBins', 50, 'FaceColor', 'g')
+xlabel("Error in Position Estimate")
+ylabel("Number of Simulations")
+legend("Z Estimation Error")
+x_mean = mean(ErrorX)
+x_std = std(ErrorX)
+y_mean = mean(ErrorY)
+y_std = std(ErrorY)
+z_mean = mean(ErrorZ)
+z_std = std(ErrorZ)
 
+std_total = norm([x_std,y_std,z_std])
+mean_err_total = x_mean+y_mean+z_mean
 
 
 
