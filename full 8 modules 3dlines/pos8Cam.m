@@ -13,7 +13,7 @@ function [mean, perc] = pos8Cam(camInfo, Pos, pixel_pos, n, CI, plots)
     cam7_pos = [camInfo.cam7.X, camInfo.cam7.Y, camInfo.cam7.Z];
     cam8_pos = [camInfo.cam8.X, camInfo.cam8.Y, camInfo.cam8.Z];
     
-    err = 1;
+    err = .5;
     
     
     max = CI(2);
@@ -86,7 +86,7 @@ function [mean, perc] = pos8Cam(camInfo, Pos, pixel_pos, n, CI, plots)
         figure
         histogram(ErrorZ, 'NumBins', 50)
         hold on
-        xlabel("Error in XPosition Estimate")
+        xlabel("Error in Z-Position Estimate")
         ylabel("Number of Simulations")
         title("Single Simulation of Normal Error in Camera Position")
         hold off

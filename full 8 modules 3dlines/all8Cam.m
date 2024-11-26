@@ -32,12 +32,12 @@ function [mean, perc] = all8Cam(camInfo, Pos, pixel_pos, n, CI, plots)
     pix7 = pixel_pos(7, :);
     pix8 = pixel_pos(8, :);
  
-    xy_err = .4;
-    z_err = .6;
+    xy_err = .3;
+    z_err = .45;
 
     pixErr = 8;
     
-    err = 1;
+    err = .5;
     
     
     max = CI(2);
@@ -133,7 +133,7 @@ function [mean, perc] = all8Cam(camInfo, Pos, pixel_pos, n, CI, plots)
         figure
         histogram(ErrorZ, 'NumBins', 50)
         hold on
-        xlabel("Error in XPosition Estimate")
+        xlabel("Error in Z-Position Estimate")
         ylabel("Number of Simulations")
         title("Single Simulation of Normal Error")
         hold off
