@@ -93,15 +93,23 @@ Pixel8 = TrajectoryToCamera(Pos, cameraInfo8);
 video = VideoWriter('eight_cameras_test.mp4','MPEG-4');
 open(video);
 
+cams = 8;
 
 figure(1)
+fld = fieldnames(camInfo);
+hold on
+for j=1:cams
+
+    cam_positions(j) = plot3(camInfo.(fld{j}).X,camInfo.(fld{j}).Y,camInfo.(fld{j}).Z,'bo', 'MarkerFaceColor', 'b', 'MarkerSize', 8);
+
+end
 
 t = linspace(0,200);
 error = zeros(1, 20);
-az = 120;
-el = 10;
+az = 110;
+el = 20;
 for i=1:n
-    plot3(Pos(i, 1), Pos(i, 2), Pos(i, 3), 'ro', 'MarkerSize', 8)
+    actual_position(i) = plot3(Pos(i, 1), Pos(i, 2), Pos(i, 3), 'ro', 'MarkerSize', 8);
     view(az, el)
     xlabel("x axis (m)")
     ylabel("y axis (m)")
@@ -110,19 +118,28 @@ for i=1:n
     ylim([0 100])
     zlim([0 20])
     view(az, el)
-    title("Position Tracking of a known path")
+    title("Position Tracking w/ 8 cams")
     frame1 = getframe(gcf);
-    for s=1:10
+    for s=1:20
         writeVideo(video,frame1);
     end
     
 
     pixel_pos = [Pixel1(i,:);Pixel2(i,:);Pixel3(i,:);Pixel4(i,:);Pixel5(i,:);Pixel6(i,:);Pixel7(i,:);Pixel8(i,:)];
 
-    plotLines(pixel_pos,camInfo,t,8)
+    cam = fieldnames(camInfo);
+
+    for k=1:cams
+
+        line = Frame2Line(pixel_pos(k, :),camInfo.(cam{k}),t);
+        hplot(k) = plot3(line(1, :), line(2, :), line(3, :), 'k-');
+        hold on
+
+    end
+
 
     position = ThreeDLines(pixel_pos,camInfo,8);
-    plot3(position(1),position(2),position(3), 'bo', 'MarkerFaceColor', 'g', 'MarkerSize', 8)
+    found_position(i) = plot3(position(1),position(2),position(3), 'bo', 'MarkerFaceColor', 'g', 'MarkerSize', 8);
     xlim([-50 50])
     ylim([0 100])
     zlim([0 20])
@@ -130,12 +147,14 @@ for i=1:n
     err = Pos(i, :)-position';
     error(i) = norm(err);
 
+    % legend([cam_positions(1),actual_position(1),hplot(1),found_position(1)],'Camera Locations','True position','Bearings Lines','Estimated Position')
+
     frame2 = getframe(gcf);
-    for s=1:10
+    for s=1:20
         writeVideo(video,frame2);
     end
     
-    
+    delete(hplot)
 
 end
 
@@ -148,7 +167,7 @@ cam = fieldnames(camInfo);
 for i=1:n
 
     line = Frame2Line(pixel_pos(i, :),camInfo.(cam{i}),t);
-    plot3(line(1, :), line(2, :), line(3, :), 'k--');
+    plot3(line(1, :), line(2, :), line(3, :), 'k-');
     hold on
 
 end
