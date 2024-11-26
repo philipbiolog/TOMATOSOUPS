@@ -90,9 +90,8 @@ Pixel8 = TrajectoryToCamera(Pos, cameraInfo8);
 pixel_pos = [Pixel1;Pixel2;Pixel3;Pixel4;Pixel5;Pixel6;Pixel7;Pixel8];
 
 %% Confidence Interval and Sampling 
-CI_Size = 300;
+CI_Size = 100;
 fidelity = 500;
-
 mean_att1 = zeros(CI_Size, 3);
 perc_att1 = zeros(CI_Size, 1);
 mean_att2 = zeros(CI_Size, 3);
@@ -108,29 +107,20 @@ perc_frame1 = zeros(CI_Size, 1);
 mean_frame2 = zeros(CI_Size, 3);
 perc_frame2 = zeros(CI_Size, 1);
 
-mean_all1 = zeros(CI_Size, 3);
-perc_all1 = zeros(CI_Size, 1);
-mean_all2 = zeros(CI_Size, 3);
-perc_all2 = zeros(CI_Size, 1);
-
 [mean_att1(1, :), perc_att1(1)] = att8Cam(camInfo, Pos, pixel_pos, fidelity, [-1, 1], true);
-[mean_att2(1, :), perc_att2(1)] = att8Cam(camInfo, Pos, pixel_pos, fidelity, [-.5, .5], false);
-[mean_pos1(1, :), perc_pos1(1)] = pos8Cam(camInfo, Pos, pixel_pos, fidelity, [-1, 1], true);
-[mean_pos2(1, :), perc_pos2(1)] = pos8Cam(camInfo, Pos, pixel_pos, fidelity, [-.5, .5], false);
-[mean_frame1(1, :), perc_frame1(1)] = frame8Cam(camInfo, Pos, pixel_pos, fidelity, [-1, 1], true);
-[mean_frame2(1, :), perc_frame2(1)] = frame8Cam(camInfo, Pos, pixel_pos, fidelity, [-.5, .5], false);
-[mean_all1(1, :), perc_all1(1)] = all8Cam(camInfo, Pos, pixel_pos, fidelity, [-1, 1], true);
-[mean_all2(1, :), perc_all2(1)] = all8Cam(camInfo, Pos, pixel_pos, fidelity, [-.5, .5], false);
+[mean_att2(1, :), perc_att2(1)] = att8Cam(camInfo, Pos, pixel_pos, fidelity, [-.5, .5], true);
+[mean_pos1(1, :), perc_pos1(1)] = att8Cam(camInfo, Pos, pixel_pos, fidelity, [-1, 1], true);
+[mean_pos2(1, :), perc_pos2(1)] = att8Cam(camInfo, Pos, pixel_pos, fidelity, [-.5, .5], true);
+[mean_frame1(1, :), perc_frame1(1)] = att8Cam(camInfo, Pos, pixel_pos, fidelity, [-1, 1], true);
+[mean_frame2(1, :), perc_frame2(1)] = att8Cam(camInfo, Pos, pixel_pos, fidelity, [-.5, .5], true);
 
 for i=2:CI_Size
     [mean_att1(i, :), perc_att1(i)] = att8Cam(camInfo, Pos, pixel_pos, fidelity, [-1, 1], false);
     [mean_att2(i, :), perc_att2(i)] = att8Cam(camInfo, Pos, pixel_pos, fidelity, [-.5, .5], false);
-    [mean_pos1(i, :), perc_pos1(i)] = pos8Cam(camInfo, Pos, pixel_pos, fidelity, [-1, 1], false);
-    [mean_pos2(i, :), perc_pos2(i)] = pos8Cam(camInfo, Pos, pixel_pos, fidelity, [-.5, .5], false);
-    [mean_frame1(i, :), perc_frame1(i)] = frame8Cam(camInfo, Pos, pixel_pos, fidelity, [-1, 1], false);
-    [mean_frame2(i, :), perc_frame2(i)] = frame8Cam(camInfo, Pos, pixel_pos, fidelity, [-.5, .5], false);
-    [mean_all1(i, :), perc_all1(i)] = all8Cam(camInfo, Pos, pixel_pos, fidelity, [-1, 1], false);
-    [mean_all2(i, :), perc_all2(i)] = all8Cam(camInfo, Pos, pixel_pos, fidelity, [-.5, .5], false);
+    [mean_pos1(i, :), perc_pos1(i)] = att8Cam(camInfo, Pos, pixel_pos, fidelity, [-1, 1], false);
+    [mean_pos2(i, :), perc_pos2(i)] = att8Cam(camInfo, Pos, pixel_pos, fidelity, [-.5, .5], false);
+    [mean_frame1(i, :), perc_frame1(i)] = att8Cam(camInfo, Pos, pixel_pos, fidelity, [-1, 1], false);
+    [mean_frame2(i, :), perc_frame2(i)] = att8Cam(camInfo, Pos, pixel_pos, fidelity, [-.5, .5], false);
     
 end
 
@@ -140,8 +130,6 @@ avg_perc_tol(3) = mean(perc_pos1);
 avg_perc_tol(4) = mean(perc_pos2);
 avg_perc_tol(5) = mean(perc_frame1);
 avg_perc_tol(6) = mean(perc_frame2);
-avg_perc_tol(7) = mean(perc_all1);
-avg_perc_tol(8) = mean(perc_all2);
 
 ConfInt(1, 1:2) = [avg_perc_tol(1) - 3*std(perc_att1), avg_perc_tol(1) + 3*std(perc_att1)];
 ConfInt(2, 1:2) = [avg_perc_tol(2) - 3*std(perc_att2), avg_perc_tol(2) + 3*std(perc_att2)];
@@ -149,8 +137,6 @@ ConfInt(3, 1:2) = [avg_perc_tol(3) - 3*std(perc_pos1), avg_perc_tol(3) + 3*std(p
 ConfInt(4, 1:2) = [avg_perc_tol(4) - 3*std(perc_pos2), avg_perc_tol(4) + 3*std(perc_pos2)];
 ConfInt(5, 1:2) = [avg_perc_tol(5) - 3*std(perc_frame1), avg_perc_tol(5) + 3*std(perc_frame1)];
 ConfInt(6, 1:2) = [avg_perc_tol(6) - 3*std(perc_frame2), avg_perc_tol(6) + 3*std(perc_frame2)];
-ConfInt(1, 1:2) = [avg_perc_tol(7) - 3*std(perc_all1), avg_perc_tol(7) + 3*std(perc_all1)];
-ConfInt(2, 1:2) = [avg_perc_tol(8) - 3*std(perc_all2), avg_perc_tol(8) + 3*std(perc_all2)];
 
 avg_perc_tol'
 
@@ -212,22 +198,4 @@ xlabel("Percentage of Data within Error Tolerance")
 title("Histrogram of Frame Error with Tolerance +/- .5 m")
 xlim([min(perc_frame2), max(perc_frame2)])
 plot([ConfInt(6, 1), ConfInt(6, 2)], [.01 .01], 'r', 'LineWidth', 2)
-hold off
-
-figure
-histogram(perc_all1, 'NumBins', 20)
-hold on
-xlabel("Percentage of Data within Error Tolerance")
-title("Histrogram of Total Error with Tolerance +/- 1 m")
-xlim([min(perc_all1), 1])
-plot([ConfInt(1, 1), ConfInt(1, 2)], [.01 .01], 'r', 'LineWidth', 2)
-hold off
-
-figure
-histogram(perc_all2, 'NumBins', 20)
-hold on
-xlabel("Percentage of Data within Error Tolerance")
-title("Histrogram of Total Error with Tolerance +/- .5 m")
-xlim([min(perc_all2), max(perc_all2)])
-plot([ConfInt(2, 1), ConfInt(2, 2)], [.01 .01], 'r', 'LineWidth', 2)
 hold off
