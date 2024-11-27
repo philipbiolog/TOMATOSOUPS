@@ -27,7 +27,7 @@ cameraInfo2.Z = 14;
 cameraInfo3.resolution = [7680;4320]; % pixels
 cameraInfo3.FOV_w = 157;
 cameraInfo3.FOV_l = 80; % deg
-cameraInfo3.attitude = [0;0;45]; % deg
+cameraInfo3.attitude = [0;0;-45]; % deg
 cameraInfo3.X = -30;
 cameraInfo3.Y = 0;
 cameraInfo3.Z = 4; % meters
@@ -36,7 +36,7 @@ cameraInfo3.Z = 4; % meters
 cameraInfo4.resolution = [7680;4320];
 cameraInfo4.FOV_w = 157;
 cameraInfo4.FOV_l = 80;
-cameraInfo4.attitude = [0;0;-45];
+cameraInfo4.attitude = [0;0;45];
 cameraInfo4.X = 30;
 cameraInfo4.Y = 0;
 cameraInfo4.Z = 4;
@@ -109,7 +109,7 @@ error = zeros(1, 20);
 az = 110;
 el = 20;
 for i=1:n
-    actual_position(i) = plot3(Pos(i, 1), Pos(i, 2), Pos(i, 3), 'ro', 'MarkerSize', 8);
+    actual_position(i) = plot3(Pos(i, 1), Pos(i, 2), Pos(i, 3), 'ro', 'MarkerSize', 8, 'MarkerFaceColor','r');
     view(az, el)
     xlabel("x axis (m)")
     ylabel("y axis (m)")
