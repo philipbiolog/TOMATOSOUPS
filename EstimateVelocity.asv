@@ -1,0 +1,28 @@
+function [raw_data,velocity] = EstimateVelocity(position,time)
+
+raw_data = position./time;
+
+mag_raw_data = norm(raw_data);
+
+px = polyfit(time,position(:,1),4);
+py = polyfit(time,position(:,2),4);
+pz = polyfit(time,position(:,3),4);
+
+vx = polyval(px,time);
+vy = polyval(py,time);
+vz = polyval(pz,time);
+
+velocity = [vx,vy,vz];
+
+figure()
+subplot(3,1,1)
+plot(time,raw_data(:,1),'ro')
+hold on
+plot(time,vx)
+xlabel('Time of flight (s)')
+ylabel('X-axis Velocity')
+
+
+
+
+end
