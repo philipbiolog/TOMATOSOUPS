@@ -11,8 +11,11 @@ py = polyfit(time,raw_data(:,2),5);
 pz = polyfit(time,raw_data(:,3),5);
 
 vx = polyval(px,time);
+vx = [0;vx];
 vy = polyval(py,time);
+vy = [0;vy];
 vz = polyval(pz,time);
+vz = [0;vz];
 
 velocity = [vx,vy,vz];
 
