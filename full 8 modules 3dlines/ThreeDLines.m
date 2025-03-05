@@ -1,4 +1,4 @@
-function pos = ThreeDLines(pixelPosition,camInfo,n)
+function pos = ThreeDLines(pixelPosition,camInfo,n,t)
 
 %loading in a struct of camInfo with n cameras in that struct, this allows you to understand
 %how many cameras you have, and the properly name variables from there.
@@ -12,7 +12,7 @@ for ii=1:n
     
     %conditional statement that if the camera cannot see the glider, do not
     %calculate the bearings line and move from there
-    if pixelPosition.(pix{ii}).bool == 0
+    if pixelPosition.(pix{ii}).bool(t) == 0
         continue
     end
 
@@ -20,10 +20,10 @@ for ii=1:n
     %the bearing line for that camera
     center = camInfo.(cam{ii}).resolution / 2;
 
-    x = pixelPosition(ii,1) - center(1);
-    % x = pixelPosition.(pix{ii}).x - center(1);
-    z = center(2) - pixelPosition(ii,2);
-    % z = center(2) - pixelPosition.(pix{ii}).z;
+    %x = pixelPosition(ii,1) - center(1);
+    x = pixelPosition.(pix{ii}).x(t) - center(1);
+    %z = center(2) - pixelPosition(ii,2);
+    z = center(2) - pixelPosition.(pix{ii}).z(t);
 
     p = (x * deg2rad(camInfo.(cam{ii}).FOV_w)) / camInfo.(cam{ii}).resolution(1);
     q = (z * deg2rad(camInfo.(cam{ii}).FOV_l)) / camInfo.(cam{ii}).resolution(2);
