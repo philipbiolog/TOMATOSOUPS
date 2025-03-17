@@ -20,11 +20,11 @@ end
 
 cam_data = camData();
 
-time.test1 = (0:(1/24):(191/24))';
-time.test2 = (0:(1/24):(228/24))';
-time.test3 = (0:(1/24):(358/24))';
-time.test4 = (0:(1/24):(158/24))';
-time.test5 = (0:(1/24):(136/24))';
+time.test1 = (0:(1/24):(190/24))';
+time.test2 = (0:(1/24):(227/24))';
+time.test3 = (0:(1/24):(357/24))';
+time.test4 = (0:(1/24):(157/24))';
+time.test5 = (0:(1/24):(135/24))';
 
 
 
@@ -39,6 +39,7 @@ time.test5 = (0:(1/24):(136/24))';
 
 
 %%
+%test 1
 figure()
 plot3(positiont1(:,1),positiont1(:,2),positiont1(:,3))
 hold on
@@ -48,9 +49,45 @@ xlabel('X-axis')
 ylabel('Y-axis')
 zlabel('Z-axis')
 
-
+%test 2
 figure()
-plot(time.test1,position(:,1))
+plot3(positiont2(:,1),positiont2(:,2),positiont2(:,3))
+hold on
+plot3(VICON.test2.pos(:,1),VICON.test2.pos(:,2),VICON.test2.pos(:,3))
+legend('Cam','Vicon')
+xlabel('X-axis')
+ylabel('Y-axis')
+zlabel('Z-axis')
+
+%test 3
+figure()
+plot3(positiont3(:,1),positiont3(:,2),positiont3(:,3))
+hold on
+plot3(VICON.test3.pos(:,1),VICON.test3.pos(:,2),VICON.test3.pos(:,3))
+legend('Cam','Vicon')
+xlabel('X-axis')
+ylabel('Y-axis')
+zlabel('Z-axis')
+
+%test 4
+figure()
+plot3(positiont4(:,1),positiont4(:,2),positiont4(:,3))
+hold on
+plot3(VICON.test4.pos(:,1),VICON.test4.pos(:,2),VICON.test4.pos(:,3))
+legend('Cam','Vicon')
+xlabel('X-axis')
+ylabel('Y-axis')
+zlabel('Z-axis')
+
+%test 5
+figure()
+plot3(positiont5(:,1),positiont5(:,2),positiont5(:,3))
+hold on
+plot3(VICON.test5.pos(:,1),VICON.test5.pos(:,2),VICON.test5.pos(:,3))
+legend('Cam','Vicon')
+xlabel('X-axis')
+ylabel('Y-axis')
+zlabel('Z-axis')
 
 
 
@@ -110,7 +147,7 @@ cam.test2.cam1.z = cell2mat(struct2cell(load('2Cam1Test2Vid2.mat','interpY')));
 cam.test2.cam1.bool = ones(length(cam.test2.cam1.x),1);
 cam.test2.cam2.x = cell2mat(struct2cell(load('2Cam2Test2Vid2.mat','interpX')));
 cam.test2.cam2.z = cell2mat(struct2cell(load('2Cam2Test2Vid2.mat','interpY')));
-cam.test2.cam1.bool = ones(length(cam.test2.cam2.x),1);
+cam.test2.cam2.bool = ones(length(cam.test2.cam2.x),1);
 
 cam.test3.cam1.x = cell2mat(struct2cell(load('2Cam1Test2Vid3.mat','interpX')));
 cam.test3.cam1.z = cell2mat(struct2cell(load('2Cam1Test2Vid3.mat','interpY')));
