@@ -33,17 +33,30 @@ time.test5 = (0:(1/24):(135/24))';
 [positiont4,velocityt4] = estimation(cam_data.test4,time.test4,2);
 [positiont5,velocityt5] = estimation(cam_data.test5,time.test5,2);
 
+
+%% velocity comparison
+
 vnorm = sqrt(velocityt1(:,1).^2 + velocityt1(:,2).^2 + velocityt1(:,3).^2);
 
 vnormV = sqrt(VICON.test1.v(:,1).^2 + VICON.test1.v(:,2).^2 + VICON.test1.v(:,3).^2);
 
+% VICONindice = find(vnormV == min(vnormV(400:600)));
+% 
+% ind = find(vnorm == min(vnorm(2:end)));
 
-%% 
-VICONindice = find(vnormV == min(vnormV(400:600)));
+vnorm2 = sqrt(velocityt2(:,1).^2 + velocityt2(:,2).^2 + velocityt2(:,3).^2);
+vnormV2 = sqrt(VICON.test2.v(:,1).^2 + VICON.test2.v(:,2).^2 + VICON.test2.v(:,3).^2);
 
-ind = find(vnorm == min(vnorm(2:end)));
+vnorm3 = sqrt(velocityt3(:,1).^2 + velocityt3(:,2).^2 + velocityt3(:,3).^2);
+vnormV3 = sqrt(VICON.test3.v(:,1).^2 + VICON.test3.v(:,2).^2 + VICON.test3.v(:,3).^2);
 
+vnorm4 = sqrt(velocityt4(:,1).^2 + velocityt4(:,2).^2 + velocityt4(:,3).^2);
+vnormV4 = sqrt(VICON.test4.v(:,1).^2 + VICON.test4.v(:,2).^2 + VICON.test4.v(:,3).^2);
 
+vnorm5 = sqrt(velocityt5(:,1).^2 + velocityt5(:,2).^2 + velocityt5(:,3).^2);
+vnormV5 = sqrt(VICON.test5.v(:,1).^2 + VICON.test5.v(:,2).^2 + VICON.test5.v(:,3).^2);
+
+% test 1
 figure()
 plot(2.4+time.test1,vnorm)
 hold on
@@ -51,61 +64,93 @@ plot(VICON.test1.t,vnormV)
 xlabel('time (s)')
 ylabel('V magnitude (m/s)')
 
-
-
-%%
-%test 1
+% test 2
 figure()
-plot3(positiont1(:,1),positiont1(:,2),positiont1(:,3))
+plot(2.4+time.test2,vnorm2)
 hold on
-plot3(VICON.test1.pos(:,1),VICON.test1.pos(:,2),VICON.test1.pos(:,3))
-legend('Cam','Vicon')
-xlabel('X-axis')
-ylabel('Y-axis')
-zlabel('Z-axis')
-axis equal
-
-%test 2
-figure()
-plot3(positiont2(:,1),positiont2(:,2),positiont2(:,3))
-hold on
-plot3(VICON.test2.pos(:,1),VICON.test2.pos(:,2),VICON.test2.pos(:,3))
-legend('Cam','Vicon')
-xlabel('X-axis')
-ylabel('Y-axis')
-zlabel('Z-axis')
-axis equal
+plot(VICON.test2.t,vnormV2)
+xlabel('time (s)')
+ylabel('V magnitude (m/s)')
 
 %test 3
 figure()
-plot3(positiont3(:,1),positiont3(:,2),positiont3(:,3))
+plot(2.25+time.test3,vnorm3)
 hold on
-plot3(VICON.test3.pos(:,1),VICON.test3.pos(:,2),VICON.test3.pos(:,3))
-legend('Cam','Vicon')
-xlabel('X-axis')
-ylabel('Y-axis')
-zlabel('Z-axis')
+plot(VICON.test3.t,vnormV3)
+xlabel('time (s)')
+ylabel('V magnitude (m/s)')
 
 %test 4
 figure()
-plot3(positiont4(:,1),positiont4(:,2),positiont4(:,3))
+plot(2.4+time.test4,vnorm4)
 hold on
-plot3(VICON.test4.pos(:,1),VICON.test4.pos(:,2),VICON.test4.pos(:,3))
-legend('Cam','Vicon')
-xlabel('X-axis')
-ylabel('Y-axis')
-zlabel('Z-axis')
+plot(VICON.test4.t,vnormV4)
+xlabel('time (s)')
+ylabel('V magnitude (m/s)')
 
-%test 5
+% test 5
 figure()
-plot3(positiont5(:,1),positiont5(:,2),positiont5(:,3))
+plot(2.4+time.test5,vnorm5)
 hold on
-plot3(VICON.test5.pos(:,1),VICON.test5.pos(:,2),VICON.test5.pos(:,3))
-legend('Cam','Vicon')
-xlabel('X-axis')
-ylabel('Y-axis')
-zlabel('Z-axis')
+plot(VICON.test5.t,vnormV5)
+xlabel('time (s)')
+ylabel('V magnitude (m/s)')
 
+
+
+% %%
+% %test 1
+% figure()
+% plot3(positiont1(:,1),positiont1(:,2),positiont1(:,3))
+% hold on
+% plot3(VICON.test1.pos(:,1),VICON.test1.pos(:,2),VICON.test1.pos(:,3))
+% legend('Cam','Vicon')
+% xlabel('X-axis')
+% ylabel('Y-axis')
+% zlabel('Z-axis')
+% axis equal
+% 
+% %test 2
+% figure()
+% plot3(positiont2(:,1),positiont2(:,2),positiont2(:,3))
+% hold on
+% plot3(VICON.test2.pos(:,1),VICON.test2.pos(:,2),VICON.test2.pos(:,3))
+% legend('Cam','Vicon')
+% xlabel('X-axis')
+% ylabel('Y-axis')
+% zlabel('Z-axis')
+% axis equal
+% 
+% %test 3
+% figure()
+% plot3(positiont3(:,1),positiont3(:,2),positiont3(:,3))
+% hold on
+% plot3(VICON.test3.pos(:,1),VICON.test3.pos(:,2),VICON.test3.pos(:,3))
+% legend('Cam','Vicon')
+% xlabel('X-axis')
+% ylabel('Y-axis')
+% zlabel('Z-axis')
+% 
+% %test 4
+% figure()
+% plot3(positiont4(:,1),positiont4(:,2),positiont4(:,3))
+% hold on
+% plot3(VICON.test4.pos(:,1),VICON.test4.pos(:,2),VICON.test4.pos(:,3))
+% legend('Cam','Vicon')
+% xlabel('X-axis')
+% ylabel('Y-axis')
+% zlabel('Z-axis')
+% 
+% %test 5
+% figure()
+% plot3(positiont5(:,1),positiont5(:,2),positiont5(:,3))
+% hold on
+% plot3(VICON.test5.pos(:,1),VICON.test5.pos(:,2),VICON.test5.pos(:,3))
+% legend('Cam','Vicon')
+% xlabel('X-axis')
+% ylabel('Y-axis')
+% zlabel('Z-axis')
+% 
 
 
 function [position,velocity] = estimation(PixPos,time,n)

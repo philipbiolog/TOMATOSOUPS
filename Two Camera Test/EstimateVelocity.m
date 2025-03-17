@@ -1,8 +1,11 @@
 function [raw_data,velocity] = EstimateVelocity(position,time)
 
 raw_vx = [0;diff(position(:,1)) ./ diff(time)];
+raw_vx(1) = raw_vx(2);
 raw_vy = [0;diff(position(:,2)) ./ diff(time)];
+raw_vy(1) = raw_vy(2);
 raw_vz = [0;diff(position(:,3)) ./ diff(time)];
+raw_vz(1) = raw_vz(2);
 
 raw_data = [raw_vx,raw_vy,raw_vz];
 
