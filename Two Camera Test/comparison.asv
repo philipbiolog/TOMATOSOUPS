@@ -108,7 +108,7 @@ zlabel('Z-axis')
 
 
 
-function [position,velocity] = estimation(PixPos,time,n)
+function [position,velocity] = estimation(PixPos,time,n,attitude)
     
     camInfo = CameraInformation();
     
