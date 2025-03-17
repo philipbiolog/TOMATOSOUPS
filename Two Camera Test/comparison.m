@@ -63,6 +63,8 @@ hold on
 plot(VICON.test1.t,vnormV)
 xlabel('time (s)')
 ylabel('V magnitude (m/s)')
+title('Test 1 velocity magnitude')
+legend('Cameras','VICON')
 
 % test 2
 figure()
@@ -71,6 +73,8 @@ hold on
 plot(VICON.test2.t,vnormV2)
 xlabel('time (s)')
 ylabel('V magnitude (m/s)')
+title('Test 2 velocity magnitude')
+legend('Cameras','VICON')
 
 %test 3
 figure()
@@ -79,6 +83,8 @@ hold on
 plot(VICON.test3.t,vnormV3)
 xlabel('time (s)')
 ylabel('V magnitude (m/s)')
+title('Test 3 velocity magnitude')
+legend('Cameras','VICON')
 
 %test 4
 figure()
@@ -87,6 +93,8 @@ hold on
 plot(VICON.test4.t,vnormV4)
 xlabel('time (s)')
 ylabel('V magnitude (m/s)')
+title('Test 4 velocity magnitude')
+legend('Cameras','VICON')
 
 % test 5
 figure()
@@ -95,6 +103,8 @@ hold on
 plot(VICON.test5.t,vnormV5)
 xlabel('time (s)')
 ylabel('V magnitude (m/s)')
+title('Test 5 velocity magnitude')
+legend('Cameras','VICON')
 
 
 
@@ -109,6 +119,7 @@ ylabel('V magnitude (m/s)')
 % ylabel('Y-axis')
 % zlabel('Z-axis')
 % axis equal
+% title('Test 1 3d position')
 % 
 % %test 2
 % figure()
@@ -120,6 +131,7 @@ ylabel('V magnitude (m/s)')
 % ylabel('Y-axis')
 % zlabel('Z-axis')
 % axis equal
+% title('Test 2 3d position')
 % 
 % %test 3
 % figure()
@@ -130,6 +142,8 @@ ylabel('V magnitude (m/s)')
 % xlabel('X-axis')
 % ylabel('Y-axis')
 % zlabel('Z-axis')
+% axis equal
+% title('Test 3 3d position')
 % 
 % %test 4
 % figure()
@@ -140,6 +154,8 @@ ylabel('V magnitude (m/s)')
 % xlabel('X-axis')
 % ylabel('Y-axis')
 % zlabel('Z-axis')
+% axis equal
+% title('Test 4 3d position')
 % 
 % %test 5
 % figure()
@@ -150,6 +166,8 @@ ylabel('V magnitude (m/s)')
 % xlabel('X-axis')
 % ylabel('Y-axis')
 % zlabel('Z-axis')
+% axis equal
+% title('Test 5 3d position')
 % 
 
 
