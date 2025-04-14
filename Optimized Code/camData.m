@@ -9,11 +9,10 @@ cam.seen = ones(length(cam.x),1);
 
 cam.pos = camInfo.pos;
 
-cam.att = camInfo.att;
-
 cam.FOV = [camInfo.FOV_w, camInfo.FOV_l];
 
 cam.res = camInfo.res;
 
+cam.R = camInfo.R;
 
 end

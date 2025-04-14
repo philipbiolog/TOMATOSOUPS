@@ -1,4 +1,4 @@
-clear all; clc; close all;
+clear; clc; close all;
 
 % Compare Vicon to Estimate
 
@@ -22,23 +22,18 @@ end
 cam1 = camData('1Test2Vid1', CameraInformation(1));
 cam2 = camData('2Test2Vid1', CameraInformation(2));
 cam_array = [cam1, cam2];
+
+%% Position Estimation
+
 position1 = posEstimate(cam_array);
 
 time.test1 = (0:(1/24):(191/24))';
 
-%% Position Estimation
-t_offset = 2.4; % sec
-
-% Rot = rotOffset  - Maybe try and get the roation from one to another
-
-vicDif = VICON.test1.pos(240, :) - VICON.test1.pos(265, :);
-posDif = position1(:, 1) - position1(:, 7);
-Rot = vicDif\posDif';
-
 figure()
 plot3(position1(1, :),position1(2,:),position1(3,:))
 hold on
-plot3(VICON.test1.pos(:,1),VICON.test1.pos(:,2),VICON.test1.pos(:,3))
+plot3(VICON.test1.pos(:,1),VICON.test1.pos(:,3),-VICON.test1.pos(:,2)+.8)
+
 legend('Cam','Vicon')
 xlabel('X-axis')
 ylabel('Y-axis')
@@ -46,5 +41,17 @@ zlabel('Z-axis')
 axis equal
 title('Test 1 3d position')
 
+figure()
+subplot(3, 1, 1)
+plot(VICON.test1.pos(:, 1))
+title('x pos')
+
+subplot(3, 1, 2)
+plot(VICON.test1.pos(:, 2))
+title('y pos')
+
+subplot(3, 1, 3)
+plot(VICON.test1.pos(:, 3))
+title('z pos')
 
 

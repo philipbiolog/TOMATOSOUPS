@@ -4,7 +4,7 @@ function R321 = RotationMatrix321(attitude)
     theta = deg2rad(attitude(2));
     psi = deg2rad(attitude(3));
     
-    R3 = [1, 0, 0;
+    R1 = [1, 0, 0;
           0, cos(phi), sin(phi);
           0, -sin(phi), cos(phi)];
     
@@ -12,7 +12,7 @@ function R321 = RotationMatrix321(attitude)
           0, 1, 0;
           sin(theta), 0, cos(theta)];
     
-    R1 = [cos(psi), sin(psi), 0;
+    R3 = [cos(psi), sin(psi), 0;
           -sin(psi), cos(psi), 0;
           0, 0, 1];
     
