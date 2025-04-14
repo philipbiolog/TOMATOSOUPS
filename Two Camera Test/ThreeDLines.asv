@@ -22,20 +22,15 @@ for ii=1:n
 
     %x = pixelPosition(ii,1) - center(1);
     % x = pixelPosition.(pix{ii}).x(t) - center(1);
-    fx = center(1) / tand(camInfo.(cam{ii}).FOV_w / 2);
     %z = center(2) - pixelPosition(ii,2);
-    % z = center(2) - pixelPosition.(pix{ii}).z(t);
-    fz = center(2) / tand(camInfo.(cam{ii}).FOV_l / 2);
+    z = center(2) - pixelPosition.(pix{ii}).z(t);
 
-    %p = (x * deg2rad(camInfo.(cam{ii}).FOV_w)) / camInfo.(cam{ii}).resolution(1);
-    dx = (pixelPosition.(pix{ii}).x(t) - center(1)) / fx;
-    %q = (z * deg2rad(camInfo.(cam{ii}).FOV_l)) / camInfo.(cam{ii}).resolution(2);
-    dz = (pixelPosition.(pix{ii}).z(t) - center(2)) / fz;
+    p = (x * deg2rad(camInfo.(cam{ii}).FOV_w)) / camInfo.(cam{ii}).resolution(1);
+    q = (z * deg2rad(camInfo.(cam{ii}).FOV_l)) / camInfo.(cam{ii}).resolution(2);
 
     x_bar.(cam{ii}) = [camInfo.(cam{ii}).X;camInfo.(cam{ii}).Y;camInfo.(cam{ii}).Z];
 
-    d_temp = [dx , 1 , dz]';
-    d_temp = d_temp / norm(d_temp);
+    d_temp = [tan(p) , 1 , tan(q)]';
 
     R = RotationMatrix321(deg2rad(camInfo.(cam{ii}).attitude));
 
