@@ -12,7 +12,7 @@ for ii=1:n
     
     %conditional statement that if the camera cannot see the glider, do not
     %calculate the bearings line and move from there
-    if pixelPosition.(pix{ii}).bool(t) == 0
+    if isnan(pixelPosition.(pix{ii}).x(t))
         continue
     end
 

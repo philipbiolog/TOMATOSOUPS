@@ -1,0 +1,41 @@
+clear all; clc; close all;
+
+cam_info2 = camInfoD1();
+
+[positiont1,velocityt1] = estimation(cam_data.test1,time.test1,2);
+
+
+
+
+
+function [position,velocity] = estimation(PixPos,time,n)
+    
+    camInfo = camInfoD1();
+    
+    for j=1:length(time)
+    
+        position(j,:) = ThreeDLines(PixPos,camInfo,n,j);
+    
+    end
+    
+    [velocity,~] = EstimateVelocity(position,time);
+
+end
+
+
+function cam = camData()
+
+cam.test1.cam1.x = cell2mat(struct2cell(load('C1.mat','interpX')));
+cam.test1.cam1.z = cell2mat(struct2cell(load('C1.mat','interpY')));
+
+cam.test1.cam2.x = cell2mat(struct2cell(load('data2.mat','interpX')));
+cam.test1.cam2.z = cell2mat(struct2cell(load('data2.mat','interpY')));
+
+cam.test1.cam3.x = cell2mat(struct2cell(load('data3.mat','interpX')));
+cam.test1.cam3.z = cell2mat(struct2cell(load('data3.mat','interpY')));
+
+cam.test1.cam4.x = cell2mat(struct2cell(load('data4.mat','interpX')));
+cam.test1.cam4.z = cell2mat(struct2cell(load('data4.mat','interpY')));
+
+
+end
