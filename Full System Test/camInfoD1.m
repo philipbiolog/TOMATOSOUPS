@@ -47,9 +47,9 @@ camInfo.cam1.FOV_l = 74.22; % deg
 
 %% Cam 2
 
-camInfo.cam2.R = Rx*R_12*Rx';
+camInfo.cam2.R = Rx*R_12'*Rx';
 
-x2 = Rx*t_12';
+x2 = Rx * t_12';
 
 camInfo.cam2.X = x2(1);
 camInfo.cam2.Y = x2(2);
@@ -62,13 +62,13 @@ camInfo.cam2.FOV_l = 74.22; % deg
 
 %% Cam 8
 
-x8 = Rx*t_18';
+x8 = t_18';
 
 camInfo.cam8.X = x8(1);
 camInfo.cam8.Y = x8(2);
 camInfo.cam8.Z = x8(3);
 
-camInfo.cam8.R = Rx*R_18*Rx';
+camInfo.cam8.R = Rx*R_18'*Rx';
 
 % camInfo.cam2.attitude = [0;0;92.5];
 camInfo.cam8.resolution = [3840;2880];
@@ -78,7 +78,7 @@ camInfo.cam8.FOV_l = 74.22; % deg
 
 %% Cam 7
 
-x7 = Rx * R_18 * R_78 * t_78' + x8;
+x7 = Rx * R_18' * R_78' * Rx' * t_78' + x8;
 
 camInfo.cam7.X = x7(1);
 camInfo.cam7.Y = x7(2);

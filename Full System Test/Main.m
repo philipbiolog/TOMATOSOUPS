@@ -4,7 +4,7 @@ cam_info2 = camInfoD1();
 
 cam_data = camData();
 
-time = (0:(1/24):(232/24))';
+time = (0:(1/24):(202/24))';
 
 [position,velocity] = estimation(cam_data.test1,time,2);
 
@@ -56,23 +56,23 @@ end
 function cam = camData()
 
 cam.test1.cam1.x = cell2mat(struct2cell(load('C1.mat','interpX')));
-cam.test1.cam1.x = cam.test1.cam1.x(112:344);
+cam.test1.cam1.x = cam.test1.cam1.x(112:314);
 cam.test1.cam1.z = cell2mat(struct2cell(load('C1.mat','interpY')));
-cam.test1.cam1.z = cam.test1.cam1.z(112:344);
+cam.test1.cam1.z = cam.test1.cam1.z(112:314);
 
 cam.test1.cam2.x = cell2mat(struct2cell(load('C2.mat','interpX')));
-cam.test1.cam2.x = cam.test1.cam2.x(1:233);
+cam.test1.cam2.x = cam.test1.cam2.x(1:203);
 cam.test1.cam2.z = cell2mat(struct2cell(load('C2.mat','interpY')));
-cam.test1.cam2.z = cam.test1.cam2.z(1:233);
+cam.test1.cam2.z = cam.test1.cam2.z(1:203);
 
 cam.test1.cam7.x = cell2mat(struct2cell(load('C7.mat','interpX')));
-cam.test1.cam7.x = cam.test1.cam7.x(702:934);
+cam.test1.cam7.x = cam.test1.cam7.x(702:904);
 cam.test1.cam7.z = cell2mat(struct2cell(load('C7.mat','interpY')));
-cam.test1.cam7.z = cam.test1.cam7.z(702:934);
+cam.test1.cam7.z = cam.test1.cam7.z(702:904);
 
 cam.test1.cam8.x = cell2mat(struct2cell(load('C8.mat','interpX')));
-cam.test1.cam8.x = cam.test1.cam8.x(751:983);
+cam.test1.cam8.x = cam.test1.cam8.x(751:953);
 cam.test1.cam8.z = cell2mat(struct2cell(load('C8.mat','interpY')));
-cam.test1.cam8.z = cam.test1.cam8.z(751:983);
+cam.test1.cam8.z = cam.test1.cam8.z(751:953);
 
 end
