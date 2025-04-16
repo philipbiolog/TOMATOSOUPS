@@ -1,38 +1,59 @@
 function camInfo = CameraInformation(x)
 
+    R = Rotation321(90, 0, 0); % Rotation from T frame to our coordinate frame
+
+    camInfo.res = [3840;2880];       
+    camInfo.FOV_w = 107.11;
+    camInfo.FOV_l = 74.22; % deg
+
     switch x 
         case 1
             % Cam 1
-            X = 5.23441573719257125;                        % Meters
-            Z = 0.06492045842642645004;
-            Y = 2.938185923755515905;
-            
-            camInfo.att = [0.5851339;0;89.7897107];         % Degrees
-            camInfo.res = [3840;2160];
-            
-            camInfo.FOV_w = 107;
-            camInfo.FOV_l = 74.22; % deg
+            camInfo.pos = [0;0;0];      % Meters
+            camInfo.R = eye(3);
   
         case 2
-            % Cam 2
-            X = 0;
-            Y = 0;
-            Z = 0;
-    
-            camInfo.att = [0;0;0];
-            camInfo.res = [3840;2160];
-            
-            camInfo.FOV_w = 107;
-            camInfo.FOV_l = 74.22; % deg
+            % Cam 2  
+            camInfo.pos = convLength([-1863.74228873381; -119.56942245858; 924.048776430168], 'in', 'm'); % Meters
+
+            camInfo.R = [0.471086257738911	-0.0187171968246582	0.881888544155425;
+                        0.0686848083802152	0.997517703145952	-0.0155186664439470;
+                        -0.879408969062359	0.0678829761681997	0.471202468880657];
+
+            camInfo.R = R*camInfo.R*R';             % Rotation 
+
         case 3
         case 4
         case 5
         case 6
         case 7
+            % Cam 7   
+            camInfo.pos = convLength([1055.63611107020; -2.17105307418258; 959.668468784385], 'in', 'm');  % Meters
+
+            camInfo.R = [0.999915655411302	0.0106079258734301	-0.00749359540213026
+                        -0.0106787339356653	0.999898106471831	-0.00947318930338735
+                        0.00739234096334073	0.00955241240265280	0.999927049695312];     % 7 -> 8
+
+            camInfo.R = [0.376080319358385	-0.162522690662849	-0.912222543248632;
+                        -0.599285609886348	0.708200836834624	-0.373240314663203;
+                        0.706696788711003	0.687050179918793	0.168942887092385] * camInfo.R'; % 1 -> 8 * 8 -> 7  = 1 -> 7
+
+            camInfo.R = R * camInfo.R * R';
+
+
+
         case 8
+            % Cam 8
+            camInfo.pos = convLength([-73.7389860631579; 7.25821290059708; -19.1142834939380], 'in', 'm'); % Meters
+
+            camInfo.R = [0.376080319358385	-0.162522690662849	-0.912222543248632;
+                        -0.599285609886348	0.708200836834624	-0.373240314663203;
+                        0.706696788711003	0.687050179918793	0.168942887092385]; % 1 -> 8
+            camInfo.R = R * camInfo.R * R';
         otherwise
             camInfo = 0;
     end
-    camInfo.pos = [X; Y; Z]; % 3x1 Vector
+
+    camInfo.pos = R*camInfo.pos;
 
 end

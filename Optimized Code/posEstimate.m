@@ -24,7 +24,7 @@ for t = 1:size
             cam_array = [cam_array, cam];
         end
     end
-    n = length(cam_array);
+    n = length(cam_array);                  % Number of Cameras that can see the vehicle
     pos(:, t) = fmincon(@(x) averageDistance(cam_array, x, n), x0, [], []);
 end
 

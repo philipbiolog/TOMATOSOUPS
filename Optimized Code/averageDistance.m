@@ -1,4 +1,4 @@
-function dist = averageDistance(cam_struct, pos, n)
+function dist = averageDistance(cam_struct, pos, n) % Definitely not the problem
 %{
 %% Objective: 
 Calculates the average distance, or error, of the array of pointing lines
@@ -9,7 +9,9 @@ cameras and what they see
 %% Inputs:
 cam_struct:     1xn array of Camera structs. Each camera must be able to
                 see the object and therefore have data at the current time step
+
 pos:            Current guess or estimate being used by cost function
+
 n:              number of cameras that can see the object
 %% Outputs:
 dist:           Total distance error between pos and the n lines given by
@@ -19,9 +21,9 @@ dist:           Total distance error between pos and the n lines given by
 %}
 
 dist = 0;
-for i = 1:n
-    cam = cam_struct(i);
-    dist = dist + shortestDist(cam, pos);
+for i = 1:n                                 %       For every camera that can see, calculate
+    cam = cam_struct(i);                    %       the shortest dist between the bearings line
+    dist = dist + shortestDist(cam, pos);   %       and a given point. Return the sum of these distances
 end
 
 
