@@ -37,7 +37,7 @@ for ii=1:n
     d_temp = [dx , 1 , dz]';
     d_temp = d_temp / norm(d_temp);
 
-    R = RotationMatrix321(deg2rad(camInfo.(cam{ii}).attitude));
+    R = camInfo.(cam{ii}).R;
 
     %final direction vector calculated
     d.(cam{ii}) = R \ d_temp;

@@ -53,7 +53,7 @@ attit = [0.2;0.15;0] * pi/180;
 R = RotationMatrix321(attit);
 R1 = R';
 
-offset = [0,-5.2344157371925712,1.7778984];
+offset = [0,-5.2344157371925712,1.8778984];
 
 % first test
 [positiont1,velocityt1] = estimation(cam_data.test1,time.test1,2);
@@ -100,26 +100,57 @@ end
 
 positiont5 = positiont5 + offset;
 
+%% Error calculation
+
+modpos1 = interp1(time.test1,positiont1,0:0.01:time.test1(end),'pchip');
+modpos2 = interp1(time.test2,positiont2,0:0.01:time.test2(end),'pchip');
+modpos3 = interp1(time.test3,positiont3,0:0.01:time.test3(end),'pchip');
+modpos4 = interp1(time.test4,positiont4,0:0.01:time.test4(end),'pchip');
+
+evec1 = VICON.test1.pos(234:end,:)-modpos1;
+t1 = (0:0.01:time.test1(end))';
+error1 = (evec1(:,1).^2 + evec1(:,2).^2+evec1(:,3).^2).^(1/2);
+
+evec2 = VICON.test2.pos(233:end,:)-modpos2;
+error2 = (evec2(:,1).^2 + evec2(:,2).^2+evec2(:,3).^2).^(1/2);
+
+evec3 = VICON.test3.pos(193:end,:)-modpos3;
+error3 = (evec3(:,1).^2 + evec3(:,2).^2+evec3(:,3).^2).^(1/2);
+
+evec4 = VICON.test4.pos(171:end,:)-modpos4;
+error4 = (evec4(:,1).^2 + evec4(:,2).^2+evec4(:,3).^2).^(1/2);
+
+[vmod1,~] = EstimateVelocity(modpos1,t1);
+
+%%
+figure()
+plot(0:0.01:time.test1(end),error1)
+xlabel("Time (s)")
+ylabel("Error in position")
+
+figure()
+plot(0:0.01:time.test2(end),error2)
+xlabel("Time (s)")
+ylabel("Error in position")
+
+figure()
+plot(0:0.01:time.test3(end),error3)
+xlabel("Time (s)")
+ylabel("Error in position")
+
+figure()
+plot(0:0.01:time.test4(end),error4)
+xlabel("Time (s)")
+ylabel("Error in position")
+
+
+
 
 
 %% velocity comparison
 
-vnorm = sqrt(velocityt1(:,1).^2 + velocityt1(:,2).^2 + velocityt1(:,3).^2);
-
-vnormV = sqrt(VICON.test1.v(:,1).^2 + VICON.test1.v(:,2).^2 + VICON.test1.v(:,3).^2);
-
-
-vnorm2 = sqrt(velocityt2(:,1).^2 + velocityt2(:,2).^2 + velocityt2(:,3).^2);
-vnormV2 = sqrt(VICON.test2.v(:,1).^2 + VICON.test2.v(:,2).^2 + VICON.test2.v(:,3).^2);
-
-vnorm3 = sqrt(velocityt3(:,1).^2 + velocityt3(:,2).^2 + velocityt3(:,3).^2);
-vnormV3 = sqrt(VICON.test3.v(:,1).^2 + VICON.test3.v(:,2).^2 + VICON.test3.v(:,3).^2);
-
-vnorm4 = sqrt(velocityt4(:,1).^2 + velocityt4(:,2).^2 + velocityt4(:,3).^2);
-vnormV4 = sqrt(VICON.test4.v(:,1).^2 + VICON.test4.v(:,2).^2 + VICON.test4.v(:,3).^2);
-
-vnorm5 = sqrt(velocityt5(:,1).^2 + velocityt5(:,2).^2 + velocityt5(:,3).^2);
-vnormV5 = sqrt(VICON.test5.v(:,1).^2 + VICON.test5.v(:,2).^2 + VICON.test5.v(:,3).^2);
+cam1pos = [0;-5.2324;1.8764];
+cam2pos = [-2.9972;0;1.8764];
 
 % test 1
 figure()
@@ -127,75 +158,144 @@ subplot(3,1,1)
 plot(2.4+time.test1,velocityt1(:,1))
 hold on
 plot(VICON.test1.t,VICON.test1.v(:,1))
+% plot(time.test1,velocityt1(:,1))
+% plot(0:0.01:time.test1(end),vmod1)
+
 xlabel('time (s)')
 ylabel('Vx (m/s)')
-title('Test 1 velocity magnitude')
+title('Test 1 3 Axis Velocity')
 legend('Cameras','VICON')
 
 subplot(3,1,2)
 plot(2.4+time.test1,velocityt1(:,2))
+xlabel('time (s)')
+ylabel('Vy (m/s)')
 hold on
 plot(VICON.test1.t,VICON.test1.v(:,2))
 
 subplot(3,1,3)
 plot(2.4+time.test1,velocityt1(:,3))
+xlabel('time (s)')
+ylabel('Vz (m/s)')
 hold on
 plot(VICON.test1.t,VICON.test1.v(:,3))
 
 % test 2
 figure()
-plot(2.4+time.test2,vnorm2)
+subplot(3,1,1)
+plot(2.4+time.test2,velocityt2(:,1))
 hold on
-plot(VICON.test2.t,vnormV2)
+plot(VICON.test2.t,VICON.test2.v(:,1))
 xlabel('time (s)')
-ylabel('V magnitude (m/s)')
-title('Test 2 velocity magnitude')
+ylabel('Vx (m/s)')
+title('Test 2 3 Axis Velocity')
 legend('Cameras','VICON')
+
+subplot(3,1,2)
+plot(2.4+time.test2,velocityt2(:,2))
+hold on
+xlabel('time (s)')
+ylabel('Vy (m/s)')
+plot(VICON.test2.t,VICON.test2.v(:,2))
+
+subplot(3,1,3)
+plot(2.4+time.test2,velocityt2(:,3))
+hold on
+xlabel('time (s)')
+ylabel('Vz (m/s)')
+plot(VICON.test2.t,VICON.test2.v(:,3))
 
 %test 3
 figure()
-plot(2.25+time.test3,vnorm3)
+subplot(3,1,1)
+plot(2.25+time.test3,velocityt3(:,1))
 hold on
-plot(VICON.test3.t,vnormV3)
+plot(VICON.test3.t,VICON.test3.v(:,1))
 xlabel('time (s)')
-ylabel('V magnitude (m/s)')
-title('Test 3 velocity magnitude')
+ylabel('Vx (m/s)')
+title('Test 3 3 Axis Velocity')
 legend('Cameras','VICON')
+
+subplot(3,1,2)
+plot(2.25+time.test3,velocityt3(:,2))
+hold on
+xlabel('time (s)')
+ylabel('Vy (m/s)')
+plot(VICON.test3.t,VICON.test3.v(:,2))
+
+subplot(3,1,3)
+plot(2.25+time.test3,velocityt3(:,3))
+hold on
+xlabel('time (s)')
+ylabel('Vz (m/s)')
+plot(VICON.test3.t,VICON.test3.v(:,3))
 
 %test 4
 figure()
-plot(2.4+time.test4,vnorm4)
+subplot(3,1,1)
+plot(2+time.test4,velocityt4(:,1))
 hold on
-plot(VICON.test4.t,vnormV4)
+plot(VICON.test4.t,VICON.test4.v(:,1))
 xlabel('time (s)')
-ylabel('V magnitude (m/s)')
-title('Test 4 velocity magnitude')
+ylabel('Vx (m/s)')
+title('Test 4 3 Axis Velocity')
 legend('Cameras','VICON')
+
+subplot(3,1,2)
+plot(2+time.test4,velocityt4(:,2))
+hold on
+xlabel('time (s)')
+ylabel('Vy (m/s)')
+plot(VICON.test4.t,VICON.test4.v(:,2))
+
+subplot(3,1,3)
+plot(2+time.test4,velocityt4(:,3))
+hold on
+xlabel('time (s)')
+ylabel('Vz (m/s)')
+plot(VICON.test4.t,VICON.test4.v(:,3))
 
 % test 5
 figure()
-plot(1.88+time.test5,vnorm5)
+subplot(3,1,1)
+plot(1.45+time.test5,velocityt5(:,1))
 hold on
-plot(VICON.test5.t,vnormV5)
+plot(VICON.test5.t,VICON.test5.v(:,1))
 xlabel('time (s)')
-ylabel('V magnitude (m/s)')
-title('Test 5 velocity magnitude')
+ylabel('Vx (m/s)')
+title('Test 5 3 Axis Velocity')
 legend('Cameras','VICON')
 
+subplot(3,1,2)
+plot(1.45+time.test5,velocityt5(:,2))
+hold on
+xlabel('time (s)')
+ylabel('Vy (m/s)')
+plot(VICON.test5.t,VICON.test5.v(:,2))
+
+subplot(3,1,3)
+plot(1.45+time.test5,velocityt5(:,3))
+hold on
+xlabel('time (s)')
+ylabel('Vz (m/s)')
+plot(VICON.test5.t,VICON.test5.v(:,3))
 
 
-%%
+
+%% position plot
 %test 1
 figure()
 plot3(positiont1(:,1),positiont1(:,2),positiont1(:,3))
 hold on
-plot3(VICON.test1.pos(:,1),VICON.test1.pos(:,2),VICON.test1.pos(:,3))
-legend('Cam','Vicon')
+% plot3(VICON.test1.pos(:,1),VICON.test1.pos(:,2),VICON.test1.pos(:,3))
+plot3(modpos1(:,1),modpos1(:,2),modpos1(:,3))
+plot3(cam1pos(1),cam1pos(2),cam1pos(3),'mo','MarkerFaceColor','k')
+plot3(cam2pos(1),cam2pos(2),cam2pos(3),'go','MarkerFaceColor','k')
+legend('Cam data','Vicon','Cam1','Cam2')
 xlabel('X-axis')
 ylabel('Y-axis')
 zlabel('Z-axis')
-ylim([-1,1])
-zlim([1,3])
+axis equal
 title('Test 1 3d position')
 %% 
 %test 2
@@ -203,7 +303,9 @@ figure()
 plot3(positiont2(:,1),positiont2(:,2),positiont2(:,3))
 hold on
 plot3(VICON.test2.pos(:,1),VICON.test2.pos(:,2),VICON.test2.pos(:,3))
-legend('Cam','Vicon')
+plot3(cam1pos(1),cam1pos(2),cam1pos(3),'mo','MarkerFaceColor','k')
+plot3(cam2pos(1),cam2pos(2),cam2pos(3),'go','MarkerFaceColor','k')
+legend('Cam data','Vicon','Cam1','Cam2')
 xlabel('X-axis')
 ylabel('Y-axis')
 zlabel('Z-axis')
@@ -215,7 +317,9 @@ figure()
 plot3(positiont3(:,1),positiont3(:,2),positiont3(:,3))
 hold on
 plot3(VICON.test3.pos(:,1),VICON.test3.pos(:,2),VICON.test3.pos(:,3))
-legend('Cam','Vicon')
+plot3(cam1pos(1),cam1pos(2),cam1pos(3),'mo','MarkerFaceColor','k')
+plot3(cam2pos(1),cam2pos(2),cam2pos(3),'go','MarkerFaceColor','k')
+legend('Cam data','Vicon','Cam1','Cam2')
 xlabel('X-axis')
 ylabel('Y-axis')
 zlabel('Z-axis')
@@ -227,7 +331,9 @@ figure()
 plot3(positiont4(:,1),positiont4(:,2),positiont4(:,3))
 hold on
 plot3(VICON.test4.pos(:,1),VICON.test4.pos(:,2),VICON.test4.pos(:,3))
-legend('Cam','Vicon')
+plot3(cam1pos(1),cam1pos(2),cam1pos(3),'mo','MarkerFaceColor','k')
+plot3(cam2pos(1),cam2pos(2),cam2pos(3),'go','MarkerFaceColor','k')
+legend('Cam data','Vicon','Cam1','Cam2')
 xlabel('X-axis')
 ylabel('Y-axis')
 zlabel('Z-axis')
@@ -239,7 +345,9 @@ figure()
 plot3(positiont5(:,1),positiont5(:,2),positiont5(:,3))
 hold on
 plot3(VICON.test5.pos(:,1),VICON.test5.pos(:,2),VICON.test5.pos(:,3))
-legend('Cam','Vicon')
+plot3(cam1pos(1),cam1pos(2),cam1pos(3),'mo','MarkerFaceColor','k')
+plot3(cam2pos(1),cam2pos(2),cam2pos(3),'go','MarkerFaceColor','k')
+legend('Cam data','Vicon','Cam1','Cam2')
 xlabel('X-axis')
 ylabel('Y-axis')
 zlabel('Z-axis')
@@ -264,6 +372,8 @@ end
 
 function camInfo = CameraInformation()
 
+Rx = RotationMatrix321([pi/2;0;0]);
+
 % Cam 1
 camInfo.cam1.X = 0;
 camInfo.cam1.Y = 0;
@@ -271,7 +381,7 @@ camInfo.cam1.Z = 0;
 
 % [0;-5.2324;1.6764]
 
-camInfo.cam1.attitude = [0;0;0];
+camInfo.cam1.R = eye(3,3);
 camInfo.cam1.resolution = [3840;2880];
 
 camInfo.cam1.FOV_w = 107.11;
@@ -284,11 +394,10 @@ camInfo.cam2.Z = 0;
 
 % [-2.9972;0;1.6764]
 
-attitude1 =  [0.5851339;89.7897107;0];
-att2 = [90;0;0];
-R1 = RotationMatrix321((att2*pi/180));
+attitude1 =  [0.5851339;89.7897107;0]*(pi/180);
+R2 = RotationMatrix321(attitude1);
 
-camInfo.cam2.attitude = R1*attitude1;
+camInfo.cam2.R = Rx*R2'*Rx';
 
 % camInfo.cam2.attitude = [0;0;92.5];
 camInfo.cam2.resolution = [3840;2880];

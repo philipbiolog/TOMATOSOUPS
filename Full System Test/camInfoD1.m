@@ -1,6 +1,9 @@
 function camInfo = camInfoD1()
 
-Rx = RotationMatrix321([90;0;0]);
+Rx = RotationMatrix321([pi/2;0;0]);
+
+%Conversion rate from inch to m
+in2m = 0.0254;
 
 %% Camera 1 and Camera 8
 % Rotation Matrix 
@@ -9,7 +12,7 @@ R_18 = [0.376080319358385	-0.162522690662849	-0.912222543248632
 0.706696788711003	0.687050179918793	0.168942887092385]; 
 
 % Translation Vector
-t_18 =  [1055.63611107020	-2.17105307418258	959.668468784385]; % Inches
+t_18 =  [1055.63611107020	-2.17105307418258	959.668468784385] * in2m; % Inches
 
 %% Camera 7 and Camera 8
 % Rotation Matrix
@@ -18,7 +21,7 @@ R_78 = [0.999915655411302	0.0106079258734301	-0.00749359540213026
 0.00739234096334073	0.00955241240265280	0.999927049695312]; 
 
 % Translation Vector
-t_78 = [-73.7389860631579	7.25821290059708	-19.1142834939380] ; % Inches
+t_78 = [-73.7389860631579	7.25821290059708	-19.1142834939380] * in2m; % Inches
 
 %% Camera 1 and Camera 2 
 % Rotation Matrix
@@ -27,7 +30,7 @@ R_12 = [0.471086257738911	-0.0187171968246582	0.881888544155425
 -0.879408969062359	0.0678829761681997	0.471202468880657];
 
 % Translation Vector
-t_12 = [-1863.74228873381	-119.569422458580	924.048776430168];
+t_12 = [-1863.74228873381	-119.569422458580	924.048776430168] * in2m;
 
 %% Cam 1
 camInfo.cam1.X = 0;
@@ -36,7 +39,7 @@ camInfo.cam1.Z = 0;
 
 % [0;-5.2324;1.6764]
 
-camInfo.cam1.R = eye(6,6);
+camInfo.cam1.R = eye(3,3);
 camInfo.cam1.resolution = [3840;2880];
 
 camInfo.cam1.FOV_w = 107.11;
@@ -46,7 +49,7 @@ camInfo.cam1.FOV_l = 74.22; % deg
 
 camInfo.cam2.R = Rx*R_12*Rx';
 
-x2 = Rx*t_12;
+x2 = Rx*t_12';
 
 camInfo.cam2.X = x2(1);
 camInfo.cam2.Y = x2(2);
@@ -59,7 +62,7 @@ camInfo.cam2.FOV_l = 74.22; % deg
 
 %% Cam 8
 
-x8 = Rx*t_18;
+x8 = Rx*t_18';
 
 camInfo.cam8.X = x8(1);
 camInfo.cam8.Y = x8(2);
@@ -75,7 +78,7 @@ camInfo.cam8.FOV_l = 74.22; % deg
 
 %% Cam 7
 
-x7 = Rx * R_18 * R_78 * t_78 + x8;
+x7 = Rx * R_18 * R_78 * t_78' + x8;
 
 camInfo.cam7.X = x7(1);
 camInfo.cam7.Y = x7(2);
