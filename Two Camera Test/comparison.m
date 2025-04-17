@@ -53,7 +53,7 @@ attit = [0.2;0.15;0] * pi/180;
 R = RotationMatrix321(attit);
 R1 = R';
 
-offset = [0,-5.2344157371925712,1.8778984];
+offset = [0,-5.2344157371925712,1.6778984];
 
 % first test
 [positiont1,velocityt1] = estimation(cam_data.test1,time.test1,2);
@@ -287,8 +287,7 @@ plot(VICON.test5.t,VICON.test5.v(:,3))
 figure()
 plot3(positiont1(:,1),positiont1(:,2),positiont1(:,3))
 hold on
-% plot3(VICON.test1.pos(:,1),VICON.test1.pos(:,2),VICON.test1.pos(:,3))
-plot3(modpos1(:,1),modpos1(:,2),modpos1(:,3))
+plot3(VICON.test1.pos(:,1),VICON.test1.pos(:,2),VICON.test1.pos(:,3))
 plot3(cam1pos(1),cam1pos(2),cam1pos(3),'mo','MarkerFaceColor','k')
 plot3(cam2pos(1),cam2pos(2),cam2pos(3),'go','MarkerFaceColor','k')
 legend('Cam data','Vicon','Cam1','Cam2')

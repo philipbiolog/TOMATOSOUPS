@@ -42,41 +42,33 @@ test1(3,:) = test1(3,:) + cam_info2.cam1.Z;
 
 cam_data = camData();
 
-% figure()
-% plot(cam_data.test1.cam1.x,cam_data.test1.cam1.z)
-% xlim([0,3840])
-% ylim([0, 2880])
-% title("cam 1")
-% 
-% figure()
-% plot(cam_data.test1.cam2.x,cam_data.test1.cam2.z)
-% xlim([0,3840])
-% ylim([0, 2880])
-% title("cam 2")
-% 
-% figure()
-% plot(cam_data.test1.cam7.x,cam_data.test1.cam7.z)
-% xlim([0,3840])
-% ylim([0, 2880])
-% title("cam 7")
-% 
-% figure()
-% plot(cam_data.test1.cam8.x,cam_data.test1.cam8.z)
-% xlim([0,3840])
-% ylim([0, 2880])
-% title("cam 8")
+figure()
+plot(cam_data.test1.cam1.x,cam_data.test1.cam1.z)
+title("cam 1")
+
+figure()
+plot(cam_data.test1.cam2.x,cam_data.test1.cam2.z)
+title("cam 2")
+
+figure()
+plot(cam_data.test1.cam7.x,cam_data.test1.cam7.z)
+title("cam 7")
+
+figure()
+plot(cam_data.test1.cam8.x,cam_data.test1.cam8.z)
+title("cam 8")
 
 time = (0:(1/24):(202/24))';
 [position,velocity] = estimation(cam_data.test1,time,2);
 
 figure()
-plot3(position(50:end,1),position(50:end,2),position(50:end,3))
+plot3(position(:,1),position(:,2),position(:,3))
 hold on
-% plot3(test2(1,:),test2(2,:),test2(3,:))
-% hold on
-% plot3(test7(1,:),test7(2,:),test7(3,:))
-% plot3(test8(1,:),test8(2,:),test8(3,:))
-% plot3(test1(1,:),test1(2,:),test1(3,:))
+plot3(test2(1,:),test2(2,:),test2(3,:))
+hold on
+plot3(test7(1,:),test7(2,:),test7(3,:))
+plot3(test8(1,:),test8(2,:),test8(3,:))
+plot3(test1(1,:),test1(2,:),test1(3,:))
 plot3(0,0,0,'bo','MarkerFaceColor','b')
 plot3(cam_info2.cam2.X,cam_info2.cam2.Y,cam_info2.cam2.Z,'go','MarkerFaceColor','g')
 plot3(cam_info2.cam7.X,cam_info2.cam7.Y,cam_info2.cam7.Z,'ro','MarkerFaceColor','r')

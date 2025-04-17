@@ -16,23 +16,21 @@ for ii=1:n
     %calculate the bearings line and move from there
     if isnan(pixelPosition.(pix{ii}).x(t))
         continue
+    elseif pixelPosition.(pix{ii}).x(t) < 0 || pixelPosition.(pix{ii}).x(t) > camInfo.(cam{ii}).resolution(1)
+        continue
+    elseif pixelPosition.(pix{ii}).z(t) < 0 || pixelPosition.(pix{ii}).z(t) > camInfo.(cam{ii}).resolution(2)
+        continue
     end
 
     %The next few lines are doing calculations to evaluate the direction of
     %the bearing line for that camera
     center = camInfo.(cam{ii}).resolution / 2;
 
-    %x = pixelPosition(ii,1) - center(1);
-    % x = pixelPosition.(pix{ii}).x(t) - center(1);
     fx = center(1) / tand(camInfo.(cam{ii}).FOV_w / 2);
-    %z = center(2) - pixelPosition(ii,2);
-    % z = center(2) - pixelPosition.(pix{ii}).z(t);
     fz = center(2) / tand(camInfo.(cam{ii}).FOV_l / 2);
 
-    %p = (x * deg2rad(camInfo.(cam{ii}).FOV_w)) / camInfo.(cam{ii}).resolution(1);
     dx = (pixelPosition.(pix{ii}).x(t) - center(1)) / fx;
-    %q = (z * deg2rad(camInfo.(cam{ii}).FOV_l)) / camInfo.(cam{ii}).resolution(2);
-    dz = (pixelPosition.(pix{ii}).z(t) - center(2)) / fz;
+    dz = -(pixelPosition.(pix{ii}).z(t) - center(2)) / fz;
 
     x_bar.(cam{ii}) = [camInfo.(cam{ii}).X;camInfo.(cam{ii}).Y;camInfo.(cam{ii}).Z];
 
@@ -42,7 +40,7 @@ for ii=1:n
     R = camInfo.(cam{ii}).R;
 
     %final direction vector calculated
-    d.(cam{ii}) = R \ d_temp;
+    d.(cam{ii}) = R * d_temp;
 
     clear R;
     %this logs which cameras can see the glider for future use. So if cams
