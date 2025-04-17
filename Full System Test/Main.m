@@ -2,23 +2,91 @@ clear all; clc; close all;
 
 cam_info2 = camInfoD1();
 
+test = zeros(3,150);
+point = linspace(1,50,150);
+test(2,:) = point;
+
+for i=1:150
+    test2(:,i) = cam_info2.cam2.R * test(:,i);
+end
+
+test2(1,:) = test2(1,:) + cam_info2.cam2.X;
+test2(2,:) = test2(2,:) + cam_info2.cam2.Y;
+test2(3,:) = test2(3,:) + cam_info2.cam2.Z;
+
+for i=1:150
+    test7(:,i) = cam_info2.cam7.R * test(:,i);
+end
+
+test7(1,:) = test7(1,:) + cam_info2.cam7.X;
+test7(2,:) = test7(2,:) + cam_info2.cam7.Y;
+test7(3,:) = test7(3,:) + cam_info2.cam7.Z;
+
+for i=1:150
+    test8(:,i) = cam_info2.cam8.R * test(:,i);
+end
+
+test8(1,:) = test8(1,:) + cam_info2.cam8.X;
+test8(2,:) = test8(2,:) + cam_info2.cam8.Y;
+test8(3,:) = test8(3,:) + cam_info2.cam8.Z;
+
+
+for i=1:150
+    test1(:,i) = cam_info2.cam1.R * test(:,i);
+end
+
+test1(1,:) = test1(1,:) + cam_info2.cam1.X;
+test1(2,:) = test1(2,:) + cam_info2.cam1.Y;
+test1(3,:) = test1(3,:) + cam_info2.cam1.Z;
+
+
 cam_data = camData();
 
-time = (0:(1/24):(202/24))';
+% figure()
+% plot(cam_data.test1.cam1.x,cam_data.test1.cam1.z)
+% xlim([0,3840])
+% ylim([0, 2880])
+% title("cam 1")
+% 
+% figure()
+% plot(cam_data.test1.cam2.x,cam_data.test1.cam2.z)
+% xlim([0,3840])
+% ylim([0, 2880])
+% title("cam 2")
+% 
+% figure()
+% plot(cam_data.test1.cam7.x,cam_data.test1.cam7.z)
+% xlim([0,3840])
+% ylim([0, 2880])
+% title("cam 7")
+% 
+% figure()
+% plot(cam_data.test1.cam8.x,cam_data.test1.cam8.z)
+% xlim([0,3840])
+% ylim([0, 2880])
+% title("cam 8")
 
+time = (0:(1/24):(202/24))';
 [position,velocity] = estimation(cam_data.test1,time,2);
 
 figure()
-plot3(position(:,1),position(:,2),position(:,3))
+plot3(position(50:end,1),position(50:end,2),position(50:end,3))
 hold on
-plot3(0,0,0,'bo','MarkerFaceColor','k')
-plot3(cam_info2.cam2.X,cam_info2.cam2.Y,cam_info2.cam2.Z,'go','MarkerFaceColor','k')
-plot3(cam_info2.cam7.X,cam_info2.cam7.Y,cam_info2.cam7.Z,'ro','MarkerFaceColor','k')
-plot3(cam_info2.cam8.X,cam_info2.cam8.Y,cam_info2.cam8.Z,'mo','MarkerFaceColor','k')
+% plot3(test2(1,:),test2(2,:),test2(3,:))
+% hold on
+% plot3(test7(1,:),test7(2,:),test7(3,:))
+% plot3(test8(1,:),test8(2,:),test8(3,:))
+% plot3(test1(1,:),test1(2,:),test1(3,:))
+plot3(0,0,0,'bo','MarkerFaceColor','b')
+plot3(cam_info2.cam2.X,cam_info2.cam2.Y,cam_info2.cam2.Z,'go','MarkerFaceColor','g')
+plot3(cam_info2.cam7.X,cam_info2.cam7.Y,cam_info2.cam7.Z,'ro','MarkerFaceColor','r')
+plot3(cam_info2.cam8.X,cam_info2.cam8.Y,cam_info2.cam8.Z,'mo','MarkerFaceColor','m')
 xlabel('X axis (m)')
 ylabel('Y axis (m)')
 zlabel('Z axis (m)')
+legend("Trajectory","Cam1","Cam2","Cam7","Cam8")
 
+%{
 figure()
 subplot(3,1,1)
 plot(time,velocity(:,1))
@@ -35,7 +103,7 @@ subplot(3,1,3)
 plot(time,velocity(:,3))
 xlabel('time (s)')
 ylabel('Vz (m/s)')
-
+%}
 
 
 function [position,velocity] = estimation(PixPos,time,n)
@@ -55,15 +123,25 @@ end
 
 function cam = camData()
 
+%
 cam.test1.cam1.x = cell2mat(struct2cell(load('C1.mat','interpX')));
 cam.test1.cam1.x = cam.test1.cam1.x(112:314);
 cam.test1.cam1.z = cell2mat(struct2cell(load('C1.mat','interpY')));
-cam.test1.cam1.z = cam.test1.cam1.z(112:314);
+cam.test1.cam1.z = -cam.test1.cam1.z(112:314) + 2880;
 
 cam.test1.cam2.x = cell2mat(struct2cell(load('C2.mat','interpX')));
 cam.test1.cam2.x = cam.test1.cam2.x(1:203);
 cam.test1.cam2.z = cell2mat(struct2cell(load('C2.mat','interpY')));
-cam.test1.cam2.z = cam.test1.cam2.z(1:203);
+cam.test1.cam2.z = -cam.test1.cam2.z(1:203) + 2880;
+%}
+
+%{
+cam.test1.cam1.x = NaN(1000,1);
+cam.test1.cam1.z = NaN(1000,1);
+
+cam.test1.cam2.x = NaN(1000,1);
+cam.test1.cam2.z = NaN(1000,1);
+%}
 
 cam.test1.cam7.x = cell2mat(struct2cell(load('C7.mat','interpX')));
 cam.test1.cam7.x = cam.test1.cam7.x(702:904);

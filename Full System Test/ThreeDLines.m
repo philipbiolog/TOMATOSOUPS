@@ -6,6 +6,8 @@ cam = fieldnames(camInfo);
 pix = fieldnames(pixelPosition);
 %% Camera values
 
+cam_see = [];
+
 iterator = 1;
 
 for ii=1:n
@@ -50,6 +52,11 @@ for ii=1:n
     cam_see(iterator) = ii;
     iterator = iterator+1;
     
+end
+
+if length(cam_see) < 2
+    pos = NaN(3,1);
+    return
 end
 
 %% Equations
