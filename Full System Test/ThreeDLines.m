@@ -4,6 +4,9 @@ function pos = ThreeDLines(pixelPosition,camInfo,n,t)
 %how many cameras you have, and the properly name variables from there.
 cam = fieldnames(camInfo);
 pix = fieldnames(pixelPosition);
+
+%% Stuff to test bearing lines
+
 %% Camera values
 
 cam_see = [];

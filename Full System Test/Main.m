@@ -1,4 +1,4 @@
-clear all; clc; close all;
+clear all; clc;
 
 cam_info2 = camInfoD1();
 
@@ -6,57 +6,89 @@ test = zeros(3,150);
 point = linspace(1,50,150);
 test(2,:) = point;
 
-for i=1:150
-    test2(:,i) = cam_info2.cam2.R * test(:,i);
-end
+% for i=1:150
+%     test2(:,i) = cam_info2.cam2.R * test(:,i);
+% end
+% 
+% test2(1,:) = test2(1,:) + cam_info2.cam2.X;
+% test2(2,:) = test2(2,:) + cam_info2.cam2.Y;
+% test2(3,:) = test2(3,:) + cam_info2.cam2.Z;
+% 
+% for i=1:150
+%     test7(:,i) = cam_info2.cam7.R * test(:,i);
+% end
+% 
+% test7(1,:) = test7(1,:) + cam_info2.cam7.X;
+% test7(2,:) = test7(2,:) + cam_info2.cam7.Y;
+% test7(3,:) = test7(3,:) + cam_info2.cam7.Z;
+% 
+% for i=1:150
+%     test8(:,i) = cam_info2.cam8.R * test(:,i);
+% end
+% 
+% test8(1,:) = test8(1,:) + cam_info2.cam8.X;
+% test8(2,:) = test8(2,:) + cam_info2.cam8.Y;
+% test8(3,:) = test8(3,:) + cam_info2.cam8.Z;
+% 
+% 
+% for i=1:150
+%     test1(:,i) = cam_info2.cam1.R * test(:,i);
+% end
+% 
+% test1(1,:) = test1(1,:) + cam_info2.cam1.X;
+% test1(2,:) = test1(2,:) + cam_info2.cam1.Y;
+% test1(3,:) = test1(3,:) + cam_info2.cam1.Z;
 
-test2(1,:) = test2(1,:) + cam_info2.cam2.X;
-test2(2,:) = test2(2,:) + cam_info2.cam2.Y;
-test2(3,:) = test2(3,:) + cam_info2.cam2.Z;
+pix = [2037.17374517375,1681.43243243243];
+center = cam_info2.cam7.resolution / 2;
+fx = center(1) / tand(cam_info2.cam7.FOV_w / 2);
+fz = center(2) / tand(cam_info2.cam7.FOV_l / 2);
 
-for i=1:150
-    test7(:,i) = cam_info2.cam7.R * test(:,i);
-end
+dx = (pix(1) - center(1)) / fx;
+dz = -(pix(2) - center(2)) / fz;
 
-test7(1,:) = test7(1,:) + cam_info2.cam7.X;
-test7(2,:) = test7(2,:) + cam_info2.cam7.Y;
-test7(3,:) = test7(3,:) + cam_info2.cam7.Z;
+d_temp = [dx , 1 , dz]';
+d_temp = d_temp / norm(d_temp);
 
-for i=1:150
-    test8(:,i) = cam_info2.cam8.R * test(:,i);
-end
+R = cam_info2.cam7.R;
 
-test8(1,:) = test8(1,:) + cam_info2.cam8.X;
-test8(2,:) = test8(2,:) + cam_info2.cam8.Y;
-test8(3,:) = test8(3,:) + cam_info2.cam8.Z;
+%final direction vector calculated
+d = R * d_temp;
 
+%% 
+flight = repmat((1:70)', 1, 3).*d';
+flight(:,1) = flight(:,1) + cam_info2.cam7.X;
+flight(:,2) = flight(:,2) + cam_info2.cam7.Y;
+flight(:,3) = flight(:,3) + cam_info2.cam7.Z;
 
-for i=1:150
-    test1(:,i) = cam_info2.cam1.R * test(:,i);
-end
-
-test1(1,:) = test1(1,:) + cam_info2.cam1.X;
-test1(2,:) = test1(2,:) + cam_info2.cam1.Y;
-test1(3,:) = test1(3,:) + cam_info2.cam1.Z;
+%%
 
 
 cam_data = camData();
 
-figure()
-plot(cam_data.test1.cam1.x,cam_data.test1.cam1.z)
-title("cam 1")
-
-figure()
-plot(cam_data.test1.cam2.x,cam_data.test1.cam2.z)
-title("cam 2")
-
-figure()
-plot(cam_data.test1.cam7.x,cam_data.test1.cam7.z)
-title("cam 7")
-
-figure()
-plot(cam_data.test1.cam8.x,cam_data.test1.cam8.z)
-title("cam 8")
+% figure()
+% plot(cam_data.test1.cam1.x,-cam_data.test1.cam1.z+2840)
+% title("cam 1")
+% xlim([0,3840])
+% ylim([0,2880])
+% 
+% figure()
+% plot(cam_data.test1.cam2.x,-cam_data.test1.cam2.z+2840)
+% title("cam 2")
+% xlim([0,3840])
+% ylim([0,2880])
+% 
+% figure()
+% plot(cam_data.test1.cam7.x,-cam_data.test1.cam7.z+2840)
+% title("cam 7")
+% xlim([0,3840])
+% ylim([0,2880])
+% 
+% figure()
+% plot(cam_data.test1.cam8.x,-cam_data.test1.cam8.z+2840)
+% title("cam 8")
+% xlim([0,3840])
+% ylim([0,2880])
 
 time = (0:(1/24):(202/24))';
 [position,velocity] = estimation(cam_data.test1,time,2);
@@ -64,11 +96,12 @@ time = (0:(1/24):(202/24))';
 figure()
 plot3(position(:,1),position(:,2),position(:,3))
 hold on
-plot3(test2(1,:),test2(2,:),test2(3,:))
-hold on
-plot3(test7(1,:),test7(2,:),test7(3,:))
-plot3(test8(1,:),test8(2,:),test8(3,:))
-plot3(test1(1,:),test1(2,:),test1(3,:))
+plot3(flight(:,1),flight(:,2),flight(:,3))
+% plot3(test2(1,:),test2(2,:),test2(3,:))
+% hold on
+% plot3(test7(1,:),test7(2,:),test7(3,:))
+% plot3(test8(1,:),test8(2,:),test8(3,:))
+% plot3(test1(1,:),test1(2,:),test1(3,:))
 plot3(0,0,0,'bo','MarkerFaceColor','b')
 plot3(cam_info2.cam2.X,cam_info2.cam2.Y,cam_info2.cam2.Z,'go','MarkerFaceColor','g')
 plot3(cam_info2.cam7.X,cam_info2.cam7.Y,cam_info2.cam7.Z,'ro','MarkerFaceColor','r')
@@ -116,15 +149,15 @@ end
 function cam = camData()
 
 %
-cam.test1.cam1.x = cell2mat(struct2cell(load('C1.mat','interpX')));
+cam.test1.cam1.x = cell2mat(struct2cell(load('C12.mat','interpX')));
 cam.test1.cam1.x = cam.test1.cam1.x(112:314);
-cam.test1.cam1.z = cell2mat(struct2cell(load('C1.mat','interpY')));
-cam.test1.cam1.z = -cam.test1.cam1.z(112:314) + 2880;
+cam.test1.cam1.z = cell2mat(struct2cell(load('C12.mat','interpY')));
+cam.test1.cam1.z = cam.test1.cam1.z(112:314);
 
 cam.test1.cam2.x = cell2mat(struct2cell(load('C2.mat','interpX')));
 cam.test1.cam2.x = cam.test1.cam2.x(1:203);
 cam.test1.cam2.z = cell2mat(struct2cell(load('C2.mat','interpY')));
-cam.test1.cam2.z = -cam.test1.cam2.z(1:203) + 2880;
+cam.test1.cam2.z = cam.test1.cam2.z(1:203);
 %}
 
 %{
@@ -135,9 +168,9 @@ cam.test1.cam2.x = NaN(1000,1);
 cam.test1.cam2.z = NaN(1000,1);
 %}
 
-cam.test1.cam7.x = cell2mat(struct2cell(load('C7.mat','interpX')));
+cam.test1.cam7.x = cell2mat(struct2cell(load('C72.mat','interpX')));
 cam.test1.cam7.x = cam.test1.cam7.x(702:904);
-cam.test1.cam7.z = cell2mat(struct2cell(load('C7.mat','interpY')));
+cam.test1.cam7.z = cell2mat(struct2cell(load('C72.mat','interpY')));
 cam.test1.cam7.z = cam.test1.cam7.z(702:904);
 
 cam.test1.cam8.x = cell2mat(struct2cell(load('C8.mat','interpX')));
