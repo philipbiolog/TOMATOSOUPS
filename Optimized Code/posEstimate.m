@@ -19,8 +19,8 @@ for t = 1:size
     for i = 1:length(cam_struct)
         if (cam_struct(i).seen(t) == true)
             cam = cam_struct(i);
-            cam.x = cam.x(t);
-            cam.z = cam.z(t);
+            cam.x = cam_struct(i).x(t);
+            cam.z = cam_struct(i).z(t);
             cam_array = [cam_array, cam];
         end
     end

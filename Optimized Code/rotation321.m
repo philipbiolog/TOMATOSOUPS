@@ -1,4 +1,4 @@
-function R321 = RotationMatrix321(attitude)
+function R321 = rotation321(attitude)
     % Input: attitude = 3x1 matrix of Euler angles (phi, theta, psi)
     phi = deg2rad(attitude(1));
     theta = deg2rad(attitude(2));

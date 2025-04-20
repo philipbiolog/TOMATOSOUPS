@@ -13,8 +13,8 @@ VD.test5 = readmatrix("Vicon/TOMATOSOUPS Day2 Trial 4.csv");
 names = fieldnames(VD);
 
 for i = 1:5
-    VICON.(names{i}).t = VD.(names{i})(4:end,1) / 100;
-    VICON.(names{i}).pos = (VD.(names{i})(4:end,6:8))/1000;
+    VICON.(names{i}).t = VD.(names{i})(10:end,1) / 100;
+    VICON.(names{i}).pos = (VD.(names{i})(10:end,6:8))/1000;
 
 end
 
@@ -58,8 +58,6 @@ time.test5 = (0:(1/24):(135/24))';
 
 offset = [1.65314, 5.16225, 0.152644] - [1.92997, -0.0677321, 1.88748];     %
 offset = offset + [-.226063, 5.06432, .327245] - [-.221153, 5.09527, .435934];
-
-
 Truth1 = VICON.test1.pos  + ones(size(VICON.test1.pos)).*offset;
 Truth2 = VICON.test2.pos  + ones(size(VICON.test2.pos)).*offset;
 Truth3 = VICON.test3.pos  + ones(size(VICON.test3.pos)).*offset;
@@ -131,27 +129,26 @@ modpos1 = interp1(time.test1,position1',0:0.01:time.test1(end),'pchip');
 modpos2 = interp1(time.test2,position2',0:0.01:time.test2(end),'pchip');
 modpos3 = interp1(time.test3,position3',0:0.01:time.test3(end),'pchip');
 modpos4 = interp1(time.test4,position4',0:0.01:time.test4(end),'pchip');
-modpos5 = interp1(time.test5,position5',0:0.01:time.test5(end),'pchip');
 
-evec1 = Truth1(260:end,:)-modpos1(1:end-26, :);
+evec1 = VICON.test1.pos(260:end,:)-modpos1(1:end-26, :);
+t1 = (0:0.01:time.test1(end))';
 error1 = (evec1(:,1).^2 + evec1(:,2).^2+evec1(:,3).^2).^(1/2);
 
-evec2 = Truth2(256:end,:)-modpos2(1:end-23, :);
+evec2 = VICON.test2.pos(256:end,:)-modpos2;
 error2 = (evec2(:,1).^2 + evec2(:,2).^2+evec2(:,3).^2).^(1/2);
 
-evec3 = Truth3(226:end,:)-modpos3(1:end-33, :);
+evec3 = VICON.test3.pos(226:end,:)-modpos3;
 error3 = (evec3(:,1).^2 + evec3(:,2).^2+evec3(:,3).^2).^(1/2);
 
-evec4 = Truth4(191:end,:)-modpos4(1:end-20, :);
+evec4 = VICON.test4.pos(191:end,:)-modpos4;
 error4 = (evec4(:,1).^2 + evec4(:,2).^2+evec4(:,3).^2).^(1/2);
 
-evec5 = Truth5(217:end,:)-modpos5(1:end-46, :);
-error5 = (evec5(:,1).^2 + evec5(:,2).^2+evec5(:,3).^2).^(1/2);
 
 
-%% Error Plotting
 
-figure()
+
+
+
 
 
 

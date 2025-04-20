@@ -56,8 +56,8 @@ l_cam = [dx; 1; dz];
 l_cam = l_cam / norm(l_cam);
 
 % Rotate to global frame
-R = cam.R;
-l = R \ l_cam;
+R = cam.R;          % Cam #_ to Cam 1
+l = R * l_cam;      
 
 % Project point onto line and get shortest vector;
 
