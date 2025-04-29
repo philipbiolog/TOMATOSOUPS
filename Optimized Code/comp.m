@@ -56,11 +56,10 @@ time.test5 = (0:(1/24):(135/24))';
 
 %% Offset
 
-offset = [1.65314, 5.16225, 0.152644] - [1.92997, -0.0677321, 1.88748];     %
-offset = offset + [-.226063, 5.06432, .327245] - [-.221153, 5.09527, .435934];
+offset = [1.65314, 5.16225, 0.152644] - [1.92997, -0.0677321, 1.88748]; 
 
 
-Truth1 = VICON.test1.pos  + ones(size(VICON.test1.pos)).*offset;
+Truth1 = VICON.test1.pos  + ones(size(VICON.test1.pos)).*offset;        % VICON offfset into our camera origin
 Truth2 = VICON.test2.pos  + ones(size(VICON.test2.pos)).*offset;
 Truth3 = VICON.test3.pos  + ones(size(VICON.test3.pos)).*offset;
 Truth4 = VICON.test4.pos  + ones(size(VICON.test4.pos)).*offset;
@@ -134,27 +133,124 @@ modpos4 = interp1(time.test4,position4',0:0.01:time.test4(end),'pchip');
 modpos5 = interp1(time.test5,position5',0:0.01:time.test5(end),'pchip');
 
 evec1 = Truth1(260:end,:)-modpos1(1:end-26, :);
-error1 = (evec1(:,1).^2 + evec1(:,2).^2+evec1(:,3).^2).^(1/2);
 
 evec2 = Truth2(256:end,:)-modpos2(1:end-23, :);
-error2 = (evec2(:,1).^2 + evec2(:,2).^2+evec2(:,3).^2).^(1/2);
 
 evec3 = Truth3(226:end,:)-modpos3(1:end-33, :);
-error3 = (evec3(:,1).^2 + evec3(:,2).^2+evec3(:,3).^2).^(1/2);
 
 evec4 = Truth4(191:end,:)-modpos4(1:end-20, :);
-error4 = (evec4(:,1).^2 + evec4(:,2).^2+evec4(:,3).^2).^(1/2);
 
 evec5 = Truth5(217:end,:)-modpos5(1:end-46, :);
-error5 = (evec5(:,1).^2 + evec5(:,2).^2+evec5(:,3).^2).^(1/2);
+
 
 
 %% Error Plotting
 
 figure()
+subplot(3, 1, 1)
+plot([0, 10], [.2, .2], 'k--')
+hold on
+title("3-Axis Position Error between Estimate and VICON")
+plot(0:.01:(length(evec1)-1)/100, evec1(:, 1))
+plot(0:.01:(length(evec2)-1)/100, evec2(:, 1))
+plot(0:.01:(length(evec3)-1)/100, evec3(:, 1))
+plot(0:.01:(length(evec4)-1)/100, evec4(:, 1))
+plot(0:.01:(length(evec5)-1)/100, evec5(:, 1))
+plot([0, 10], [-.2, -.2], 'k--')
+xlim([0, 10])
+xlabel("Time [s]")
+ylabel("X Error [m]")
+hold off
+
+subplot(3, 1, 2)
+plot([0, 10], [.2, .2], 'k--')
+hold on
+plot(0:.01:(length(evec1)-1)/100, evec1(:, 2))
+plot(0:.01:(length(evec2)-1)/100, evec2(:, 2))
+plot(0:.01:(length(evec3)-1)/100, evec3(:, 2))
+plot(0:.01:(length(evec4)-1)/100, evec4(:, 2))
+plot(0:.01:(length(evec5)-1)/100, evec5(:, 2))
+plot([0, 10], [-.2, -.2], 'k--')
+xlim([0, 10])
+xlabel("Time [s]")
+ylabel("Y Error [m]")
+hold off
+
+subplot(3, 1, 3)
+plot([0, 10], [.2, .2], 'k--')
+hold on
+plot(0:.01:(length(evec1)-1)/100, evec1(:, 3))
+plot(0:.01:(length(evec2)-1)/100, evec2(:, 3))
+plot(0:.01:(length(evec3)-1)/100, evec3(:, 3))
+plot(0:.01:(length(evec4)-1)/100, evec4(:, 3))
+plot(0:.01:(length(evec5)-1)/100, evec5(:, 3))
+plot([0, 10], [-.2, -.2], 'k--')
+xlim([0, 10])
+xlabel("Time [s]")
+ylabel("Z Error [m]")
+legend([""; "Test 1"; "Test 2"; "Test 3"; "Test 4"; "Test 5"], 'Location','southeast')
+hold off
+
+
+%% Error Value Calculation 
+
+tol = .2;
+evec1 = abs(evec1);
+evec2 = abs(evec2);
+evec3 = abs(evec3);
+evec4 = abs(evec4);
+evec5 = abs(evec5);
+totalError = [evec1; evec2; evec3; evec4; evec5];
+
+[mean(totalError((totalError(:, 1)>=0), 1)), mean(totalError((totalError(:, 2)>=0), 2)), mean(totalError((totalError(:, 3)>=0), 3))]
+
+[mean(evec1(:, 1)), mean(evec1(:, 2)), mean(evec1(:, 3))]
+[mean(evec2(:, 1)), mean(evec2(:, 2)), mean(evec2(:, 3))]
+[mean(evec3((evec3(:, 1)>=0), 1)), mean(evec3((evec3(:, 2)>=0), 2)), mean(evec3((evec3(:, 3)>=0), 3))]
+[mean(evec4((evec4(:, 1)>=0), 1)), mean(evec4((evec4(:, 2)>=0), 2)), mean(evec4((evec4(:, 3)>=0), 3))]
+[mean(evec5(:, 1)), mean(evec5(:, 2)), mean(evec5(:, 3))]
+
+%% Velocity Calculation
+
+Vel1 = diff(position1, 1, 2)';
+Vel2 = diff(position2, 1, 2)';
+Vel3 = diff(position3, 1, 2)';
+Vel4 = diff(position4, 1, 2)';
+Vel5 = diff(position5, 1, 2)';
+
+ViconVel1 = diff(Truth1);
+ViconVel2 = diff(Truth2);
+ViconVel3 = diff(Truth3);
+ViconVel4 = diff(Truth4);
+ViconVel5 = diff(Truth5);
+
+%% Velocity Plotting
 
 
 
+%% Velocity Error
+
+modvel1 = interp1(time.test1(2:end),Vel1,0:0.01:time.test1(end),'pchip');
+modvel2 = interp1(time.test2(2:end),Vel2,0:0.01:time.test2(end),'pchip');
+modvel3 = interp1(time.test3(2:end),Vel3,0:0.01:time.test3(end),'pchip');
+modvel4 = interp1(time.test4(2:end),Vel4,0:0.01:time.test4(end),'pchip');
+modvel5 = interp1(time.test5(2:end),Vel5,0:0.01:time.test5(end),'pchip');
+
+evel1 = ViconVel1(260-1:end,:)-modvel1(1:end-26, :);
+
+evel2 = ViconVel2(256-1:end,:)-modvel2(1:end-23, :);
+
+evel3 = ViconVel3(226-1:end,:)-modvel3(1:end-33, :);
+
+evel4 = ViconVel4(191-1:end,:)-modvel4(1:end-20, :);
+
+evel5 = ViconVel5(217-1:end,:)-modvel5(1:end-46, :);
+
+rvel1 = evel1 ./ ViconVel1(260-1:end, :) * 100;
+rvel2 = evel2 ./ ViconVel2(256-1:end, :) * 100;
+rvel3 = evel3 ./ ViconVel3(226-1:end, :) * 100;
+rvel4 = evel4 ./ ViconVel4(191-1:end, :) * 100;
+rvel5 = evel5 ./ ViconVel5(217-1:end, :) * 100;
 
 
 
